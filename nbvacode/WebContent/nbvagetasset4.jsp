@@ -178,10 +178,9 @@ $(document).ready(function() {
     <!--  Inner Table -->
     <table class="a" width="100%"  border="1" cellpadding="1" cellspacing="1">
   <tr>
- <!--   
+ 
   <td width="20" valign="bottom"> <b>Enter Contract Number:</b> </td> 
   <td width="20" valign="bottom">  
-  -->
      <% // out.println("<input name=\"startDate\" id=\"date2\" type=\"text\" value=\"Click for Calendar\" onclick=\"pureJSCalendar.open('yyyy-MM-dd', 20, 30, 7, '2017-1-1', '2025-12-31', 'date2', 20)\"   />" );
      %>
     <!--  <CENTER>  <input name="id" type="text"  value="101-0009442-019" /> </CENTER>  -->
@@ -190,24 +189,9 @@ $(document).ready(function() {
       <!--  <input name="id" type="text"   />  -->
       
       <div class="container1">
-      
-       <td width="20" valign="bottom"> <!--  <b>Enter Contract Number:</b>  -->
-       
-       <button class="add_form_field">Add Contract &nbsp; 
-      <span style="font-size:16px; font-weight:bold;">+ </span>
-    </button>
-       
-       
-       </td> 
-       
-       
-  <td width="20" valign="bottom">  
-      
-     <!--   
     <button class="add_form_field">Add Contract &nbsp; 
       <span style="font-size:16px; font-weight:bold;">+ </span>
     </button>
-     -->
     <div><input type="text" name="mytext[]"></div>
 </div>
       

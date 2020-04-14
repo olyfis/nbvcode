@@ -259,8 +259,13 @@ public class GetAssetList extends HttpServlet {
 		int rtnArrSZ = 0;
 		ArrayList<String> strArr = new ArrayList<String>();
 		ArrayList<String> kitArr = new ArrayList<String>();
+		ArrayList<String> idArrList = new ArrayList<String>();
+		
 		String idVal = "";
-		String dispatchJSP = "/nbvalist.jsp";
+		//String dispatchJSP = "/nbvalist.jsp";
+		
+		
+		String dispatchJSP = "/nbvalistexcelmain";
 		String dispatchJSP_Error = "/nbvaerror.jsp";
 		//String ageFile = "Y:\\GROUPS\\Global\\BI Reporting\\Finance\\FIS_Bobj\\unappsuspense\\dailyAge.csv";
 		String ageFile = "C:\\Java_Dev\\props\\nbvaupdate\\dailyAge.csv";
@@ -271,6 +276,23 @@ public class GetAssetList extends HttpServlet {
 		String formUrl = "formUrl";
 		String formUrlValue = "/nbvacode/nbvalistexcel";
 		request.getSession().setAttribute(formUrl, formUrlValue);
+		
+		
+		//String dynparamValue = request.getParameter("mytext[0]");
+		String[] pArr = request.getParameterValues("mytext[]" );
+		
+		
+		//System.out.println("***%%%*** myText=" + cars.toString()  );
+		if (pArr != null) {
+			for( String id1 : pArr) {
+				   //System.out.println("***%%%*** myText=" + id1);
+				   idArrList.add(id1);
+				}
+		} else {
+				System.out.println("pArr == null");
+			}
+		
+		request.getSession().setAttribute("idArrList", idArrList);
 		String sep = ";";
 		int arrSZ = 0;
 		//int mthRem = 0;
@@ -278,6 +300,8 @@ public class GetAssetList extends HttpServlet {
 		ageArr = Olyutil.readInputFile(ageFile);
 		// Olyutil.printStrArray(ageArr);
 
+		request.getRequestDispatcher(dispatchJSP).forward(request, response);	
+		/*
 		if ((paramValue != null && !paramValue.isEmpty())) {
 			idVal = paramValue.trim();
 			  //System.out.println("*** idVal:" + idVal + "--");
@@ -311,7 +335,7 @@ public class GetAssetList extends HttpServlet {
 				 
 			 
 				request.getSession().setAttribute("idVal", idVal);
-				 
+				
 				request.getSession().setAttribute("sqlErrMap", sqlErrMap);
 				 
 				
@@ -323,12 +347,12 @@ public class GetAssetList extends HttpServlet {
 					  //opt = contractCalcs( effDate, termDate, termPlusSpan, rtnPair);
 				}	
 				request.getSession().setAttribute("opt", opt);
-				request.getRequestDispatcher(dispatchJSP).forward(request, response);	
+				//request.getRequestDispatcher(dispatchJSP).forward(request, response);	
 			} else {
 				request.getRequestDispatcher(dispatchJSP_Error).forward(request, response);
 			}
 		
-		
+		*/
 	} // End doGet
 	
 

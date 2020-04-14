@@ -312,7 +312,7 @@ public void  buildCellsContract( JspWriter out, ContractData contract, String fo
 	out.println( "<td class=\"a\">"  + contract.getPurOption() + "</td></tr>");
 	
 	
-	
+	System.out.println("*** formURL=" + formUrl);
  
 	out.println("<tr>");
 	out.println("<th class=\" " + style + "  \" >Save as Excel File <br> May take a while to build file.</th>");	

@@ -18,7 +18,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ 
 <!--  	
 http://cvyhj3a27:8181/nbvaupdate/nbvaupdate?id=101-0010311-004&eDate=2020-03-10&boDate=2020-03-31&invoice=123123123
 
@@ -90,38 +90,6 @@ function ajaxFunction(){
 	ajaxRequest.send(); 
 }
 
-
-
-
-
-
-
-
-
-
-
-$(document).ready(function() {
-    var max_fields = 10;
-    var wrapper = $(".container1");
-    var add_button = $(".add_form_field");
-
-    var x = 1;
-    $(add_button).click(function(e) {
-        e.preventDefault();
-        if (x < max_fields) {
-            x++;
-            $(wrapper).append('<div><input type="text" name="mytext[]"/><a href="#" class="delete">Delete</a></div>'); //add input box
-        } else {
-            alert('You Reached the limits')
-        }
-    });
-
-    $(wrapper).on("click", ".delete", function(e) {
-        e.preventDefault();
-        $(this).parent('div').remove();
-        x--;
-    })
-});
  
 </script>
 
@@ -178,42 +146,13 @@ $(document).ready(function() {
     <!--  Inner Table -->
     <table class="a" width="100%"  border="1" cellpadding="1" cellspacing="1">
   <tr>
- <!--   
+ 
   <td width="20" valign="bottom"> <b>Enter Contract Number:</b> </td> 
   <td width="20" valign="bottom">  
-  -->
      <% // out.println("<input name=\"startDate\" id=\"date2\" type=\"text\" value=\"Click for Calendar\" onclick=\"pureJSCalendar.open('yyyy-MM-dd', 20, 30, 7, '2017-1-1', '2025-12-31', 'date2', 20)\"   />" );
      %>
     <!--  <CENTER>  <input name="id" type="text"  value="101-0009442-019" /> </CENTER>  -->
-      <CENTER>  
-      
-      <!--  <input name="id" type="text"   />  -->
-      
-      <div class="container1">
-      
-       <td width="20" valign="bottom"> <!--  <b>Enter Contract Number:</b>  -->
-       
-       <button class="add_form_field">Add Contract &nbsp; 
-      <span style="font-size:16px; font-weight:bold;">+ </span>
-    </button>
-       
-       
-       </td> 
-       
-       
-  <td width="20" valign="bottom">  
-      
-     <!--   
-    <button class="add_form_field">Add Contract &nbsp; 
-      <span style="font-size:16px; font-weight:bold;">+ </span>
-    </button>
-     -->
-    <div><input type="text" name="mytext[]"></div>
-</div>
-      
-      
-      
-      </CENTER>
+      <CENTER>  <input name="id" type="text"   /> </CENTER>
      
   </td>
   </tr>
@@ -313,14 +252,5 @@ $(document).ready(function() {
  </form>
 <h5>If you require access to the reports, please contact: John.Freeh@olympus.com</h5>
 <h5>Note: <font color="red">Requires Javascript to be enabled.</font> <BR>
-
-<!--  
-<div class="container1">
-    <button class="add_form_field">Add Contract &nbsp; 
-      <span style="font-size:16px; font-weight:bold;">+ </span>
-    </button>
-    <div><input type="text" name="mytext[]"></div>
-</div>
- -->
 </body>
 </html>
