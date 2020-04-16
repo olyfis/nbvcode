@@ -19,6 +19,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -50,10 +52,11 @@ import com.olympus.nbva.assets.AssetData;
 import com.olympus.nbva.contracts.ContractData;
 import com.olympus.nbva.kits.GetKitData;
 import com.olympus.olyutil.Olyutil;
+import com.olympus.olyutil.log.OlyLog;
 
 @WebServlet("/nbvalistexcelmain")
 public class AssetListExcelMain extends HttpServlet {
-	
+	private final Logger logger = Logger.getLogger(AssetListExcelMain.class.getName()); // define logger
 	static Statement stmt = null;
 	static Connection con = null;
 	static ResultSet res  = null;
@@ -642,14 +645,14 @@ public class AssetListExcelMain extends HttpServlet {
 	        Map.Entry pair = (Map.Entry)it.next();
 	        key = (String) pair.getKey();
 	       // System.out.println("Map Size= " + sz + " -- " + pair.getKey() + " = " + pair.getValue());
-	        System.out.println("Key=" + key);
+	        //System.out.println("Key=" + key);
 	        //Olyutil.printStrArray(objMap.get(key));
 	        List<Pair<ContractData, List<AssetData> >> list =  objMap.get(key);
 	        String cn = objMap.get(key).get(i).getLeft().getCustomerName();
 	        
 	        
 	        sheet = newWorkSheet(workbook, key);
-	        System.out.println("Key=" + key + "-- CN=" + cn);
+	        //System.out.println("Key=" + key + "-- CN=" + cn);
 	        contractHeader(workbook, sheet, contractHeaderArr);
 
 			assetHeader(workbook, sheet, assetHeaderArr);
@@ -658,7 +661,7 @@ public class AssetListExcelMain extends HttpServlet {
 			//System.out.println("** Call loadWorkSheetAssets");
 			loadWorkSheetAssets(workbook, sheet, list);
 	        
-	        System.out.println("***********************************************************************************************************");
+	        //System.out.println("***********************************************************************************************************");
 	    }
 		
 		// BufferedInputStream in = null;
@@ -693,7 +696,9 @@ public class AssetListExcelMain extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		HashMap<String, ArrayList<String>> idMap = new HashMap<String, ArrayList<String>>();
-		
+		String logFileName = "assetListApp.log";
+		String directoryName = "D:/Kettle/logfiles/assetListApp";
+		Handler fileHandler =  OlyLog.setAppendLog(directoryName, logFileName, logger );
 		List<Pair<ContractData, List<AssetData>>> rtnPair = new ArrayList<>();
 		HashMap<String, List<Pair<ContractData, List<AssetData>>>> objMap = new HashMap<String, List<Pair<ContractData, List<AssetData>>>>();
 		
@@ -712,9 +717,10 @@ public class AssetListExcelMain extends HttpServlet {
 		XSSFSheet sheet = null;
 		idArrList = (ArrayList<String>) request.getSession().getAttribute("idArrList");
 		//assetHeaderArr = Olyutil.readInputFile(headerFile);
-		
 		for( String idVal : idArrList) { // get data for each ID and store in hash
-			   System.out.println("***%%%*** ID=" + idVal);		   
+			String dateFmt = Olyutil.formatDate("yyyy-MM-dd hh:mm:ss.SSS");
+			logger.info(dateFmt + ": " + "------------------Begin processing contractID: " + idVal);
+			  // System.out.println("***%%%*** ID=" + idVal);		   
 			   ArrayList<String> strArr = new ArrayList<String>();
 			   strArr = getDbData(idVal, sqlFile, "", "Asset");
 			   int arrSZ = strArr.size();
@@ -736,7 +742,10 @@ public class AssetListExcelMain extends HttpServlet {
 		
 		
 	 
-		
+		 
+	 
+			fileHandler.close();   //must call h.close or a .LCK file will remain.
+	 
 		
 		 
 		 
