@@ -23,8 +23,12 @@ public class AssetData {
 	private double rollPrice;
 	private double buyPrice;
 	private double rtnPrice;
+	
+
 
 	/****************************************************************************************************************************************************/
+	
+	
 	
 	
 	
@@ -33,6 +37,9 @@ public class AssetData {
 	public String getCalcOpt() {
 		return calcOpt;
 	}
+
+
+
 
 
 	public double getRollPrice() {

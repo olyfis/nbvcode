@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import org.apache.commons.fileupload.FileItem;
@@ -58,6 +59,7 @@ public class UploadFile extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
+    	HttpSession session = request.getSession();
         // checks if the request actually contains upload file
         if (!ServletFileUpload.isMultipartContent(request)) {
             // if not, we stop here
@@ -98,12 +100,16 @@ public class UploadFile extends HttpServlet {
             // parses the request's content to extract file data
             @SuppressWarnings("unchecked")
             List<FileItem> formItems = upload.parseRequest(request);
- 
+            //String idName = (String) request.getAttribute("id");
+            //String date2 = (String) request.getAttribute("date2");
             if (formItems != null && formItems.size() > 0) {
                 // iterates over form's fields
                 for (FileItem item : formItems) {
+                	
+                	//System.out.println("***^^^*** Name=" + item.getFieldName() + "-- ID=" + idName);
                     // processes only fields that are not form fields
                     if (!item.isFormField()) {
+                    	 System.out.println("***^^^*** Name=" + item.getFieldName());
                         String fileName = new File(item.getName()).getName();
                         String filePath = uploadPath + File.separator + fileName;
                         File storeFile = new File(filePath);
@@ -111,7 +117,7 @@ public class UploadFile extends HttpServlet {
                         // saves the file on disk
                         item.write(storeFile);
                         request.setAttribute("message",
-                            "Upload has been done successfully!");
+                            "Upload has been done successfully! File located at: " + filePath);
                     }
                 }
             }

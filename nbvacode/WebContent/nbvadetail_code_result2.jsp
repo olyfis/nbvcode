@@ -24,7 +24,7 @@
 	String termPlusSpan =  (String) session.getAttribute("termPlusSpan");
 	//DecimalFormat df = new DecimalFormat("$###,##0.00");
 	String opt =  (String) session.getAttribute("opt");
-	//System.out.println("*** IN RESULT JSP");
+	System.out.println("*** IN RESULT JSP");
 %>
 
 <!DOCTYPE html>
@@ -156,30 +156,6 @@ public String  buildHeader( JspWriter out2, ArrayList<String> dataArr   ) throws
 	return header;
 	
 }
-/*************************************************************************************************************************************************************/
-public HashMap<String, String> getCalcTotals(List<AssetData> assetList) {
-	HashMap<String, String> map = new HashMap<String, String>();
-	int rtnArrSZ = assetList.size();
-	double buyTotal = 0.00;
-	double rollTotal = 0.00;
-	double retTotal = 0.00;
-	for (int j = 0; j < rtnArrSZ; j++ ) {
-		AssetData asset = new AssetData();
-		asset = assetList.get(j);
-		 buyTotal +=  asset.getBuyPrice();
-		 rollTotal += asset.getRollPrice();
-		retTotal += asset.getRtnPrice();
-	}	
-	String resTotal_df = Olyutil.decimalfmt(buyTotal, "$###,##0.00");
-	String equipTotal_df = Olyutil.decimalfmt(rollTotal, "$###,##0.00");
-	String rentalTotal_df = Olyutil.decimalfmt(retTotal, "$###,##0.00");
-	map.put("buyTotal", resTotal_df);
-	map.put("rollTotal", equipTotal_df);
-	map.put("rtnTotal", rentalTotal_df);
-	//System.out.println("*** ResTotal=" + resTotal_df + "-- EquipTotal=" + equipTotal_df + "-- RentalAmt=" + rentalTotal_df);
-	return (map);
-}
-
 /*************************************************************************************************************************************************************/
 public String  buildCells( JspWriter out, ArrayList<String> dataArr  ) throws IOException {
 	String cells = "";
@@ -394,7 +370,6 @@ public HashMap<String, String> getTotals(List<AssetData> assetList) {
 /*************************************************************************************************************************************************************/
 public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List<Pair<ContractData, List<AssetData> >> rtnPair, String opt  ) throws IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 	HashMap<String, String> rtnMap = new HashMap<String, String>();
-	HashMap<String, String> rtnMap2 = new HashMap<String, String>();
 	DecimalFormat df = new DecimalFormat("$###,##0.00");
 	String cells = "";
 	String xDataItem = null;
@@ -417,7 +392,7 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 		assetList	= rtnPair.get(0).getRight();		 
 				 
 		rtnMap = getTotals( assetList);
-		rtnMap2 = getCalcTotals( assetList);
+		
 		
 		for (int i = 0; i < listArrSZ; i++ ) {
 			//int rtnArrSZ = rtnPair.get(i).getRight().size();
@@ -431,11 +406,7 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 			cells +="<TD>" + rtnMap.get("resTotal") + "</td>";
 			cells +="<TD>" + rtnMap.get("equipTotal") + "</td>";
 			cells +="<TD>" + rtnMap.get("rentalTotal") + "</td>";
-			cells +="<TD>" + rtnMap2.get("buyTotal") + "</td>";
-			cells +="<TD>" + rtnMap2.get("rollTotal") + "</td>";
-			cells +="<TD>" + rtnMap2.get("rtnTotal") + "</td>";
-			
-			 cells +="<TD colspan=\"1\" >" + "" + "</td>";
+			 cells +="<TD colspan=\"4\" >" + "" + "</td>";
 			cells +="  </tr>";
 			
 			
