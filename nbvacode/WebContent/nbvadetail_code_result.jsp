@@ -20,6 +20,8 @@
 	double sumTotal = (double) session.getAttribute("sumTotal");
  	String kitFileName = "C:\\Java_Dev\\props\\kitdata\\kitdata.csv";
 	HashMap<String, String> map = new HashMap<String, String>();
+	//HashMap<String, String> codeMap = new HashMap<String, String>();
+	
 	int mthRem = (int) session.getAttribute("mthRem");
 	String termPlusSpan =  (String) session.getAttribute("termPlusSpan");
 	//DecimalFormat df = new DecimalFormat("$###,##0.00");

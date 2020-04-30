@@ -24,22 +24,7 @@
 	String termPlusSpan =  (String) session.getAttribute("termPlusSpan");
 	//DecimalFormat df = new DecimalFormat("$###,##0.00");
 	String opt =  (String) session.getAttribute("opt");
-	HashMap<String, String> codeMap = new HashMap<String, String>();
-	codeMap = (HashMap<String, String> )session.getAttribute("codeMapRtn");
-	String useCodeData = (String) session.getAttribute("useCodeData");
-	
-	Set<String> keys = codeMap.keySet();  //get all keys
-	for(String key: keys) {	
-	    System.out.println("**----** Key=" + key + "-- Value=" + codeMap.get(key) + "--");
-	}
-	
-	if (useCodeData.equals("true")) {
-		System.out.println("^^^^^^^ Using code data-- CM_ID="  + codeMap.get("asset"));	
-	} else {
-		System.out.println("^^^^^^^ Not using code data-- CM_ID="  + codeMap.get("asset") +"-- UCD=" +  useCodeData);	
-	}
-	
-	
+	//System.out.println("*** IN RESULT JSP");
 %>
 
 <!DOCTYPE html>
@@ -172,6 +157,30 @@ public String  buildHeader( JspWriter out2, ArrayList<String> dataArr   ) throws
 	
 }
 /*************************************************************************************************************************************************************/
+public HashMap<String, String> getCalcTotals(List<AssetData> assetList) {
+	HashMap<String, String> map = new HashMap<String, String>();
+	int rtnArrSZ = assetList.size();
+	double buyTotal = 0.00;
+	double rollTotal = 0.00;
+	double retTotal = 0.00;
+	for (int j = 0; j < rtnArrSZ; j++ ) {
+		AssetData asset = new AssetData();
+		asset = assetList.get(j);
+		 buyTotal +=  asset.getBuyPrice();
+		 rollTotal += asset.getRollPrice();
+		retTotal += asset.getRtnPrice();
+	}	
+	String resTotal_df = Olyutil.decimalfmt(buyTotal, "$###,##0.00");
+	String equipTotal_df = Olyutil.decimalfmt(rollTotal, "$###,##0.00");
+	String rentalTotal_df = Olyutil.decimalfmt(retTotal, "$###,##0.00");
+	map.put("buyTotal", resTotal_df);
+	map.put("rollTotal", equipTotal_df);
+	map.put("rtnTotal", rentalTotal_df);
+	//System.out.println("*** ResTotal=" + resTotal_df + "-- EquipTotal=" + equipTotal_df + "-- RentalAmt=" + rentalTotal_df);
+	return (map);
+}
+
+/*************************************************************************************************************************************************************/
 public String  buildCells( JspWriter out, ArrayList<String> dataArr  ) throws IOException {
 	String cells = "";
 	String xDataItem = null;
@@ -298,7 +307,7 @@ public void  buildCellsContract( JspWriter out, ContractData contract, String fo
 	out.println("<tr>");
 	out.println("<th class=\" " + style + "  \" >Equipment Payment</th>");
 	out.println( "<td class=\"a\">" + equipPayment_df + "</td></tr>");
-	/*
+	
 	out.println("<tr>");
 	out.println("<th class=\" " + style + "  \" >Service Payment</th>");	
 	out.println( "<td class=\"a\">" + contract.getServicePayment() + "</td></tr>");
@@ -314,7 +323,7 @@ public void  buildCellsContract( JspWriter out, ContractData contract, String fo
 	out.println("<tr>");
 	out.println("<th class=\" " + style + "  \" >Contract Returns</th>");
 	out.println( "<td class=\"a\">" + Olyutil.decimalfmt(contract.getRtnTotal(), "$###,##0.00")  + "</td></tr>");
-	*/
+	
 	out.println("<tr>");
 	out.println("<th class=\" " + style + "  \" >Invoice Code</th>");
 	out.println( "<td class=\"a\">"  + contract.getInvoiceCode() + "</td></tr>");
@@ -329,13 +338,13 @@ public void  buildCellsContract( JspWriter out, ContractData contract, String fo
 	
 	
 	
- /*
+ 
 	out.println("<tr>");
 	out.println("<th class=\" " + style + "  \" >Save as Excel File <br> May take a while to build file.</th>");	
 	out.println( "<td class=\"a\"> ");
 	out.println(" <form name=\"excelForm\"    enctype=\"multipart/form-data\"   method=\"get\" action=" +   formUrl  +  " >    ");
  	out.println("<input type=\"submit\" value=\"Save Excel File\" class=\"btn\" /> ");
-	*/
+	
 	out.println("</table>");
 	//out.println("</form> </td></tr></table>");
 	
@@ -355,30 +364,8 @@ public static void displayObj(Object obj) throws IOException, IllegalAccessExcep
 	    }
 
 }
-/*************************************************************************************************************************************************************/
 
 /*************************************************************************************************************************************************************/
-// Invoke: strArr = GetKitData.getKitData(fileName);
-	public static ArrayList<String> getKitData(String fileName) throws IOException {
-
-		ArrayList<String> strArr = new ArrayList<String>();
-		strArr = Olyutil.readInputFile(fileName);
-		return (strArr);
-	}
-/*************************************************************************************************************************************************************/
-
-	public static HashMap<String, String> getKitHash(ArrayList<String> kitDataArr  ) throws IOException {
-		HashMap<String, String> map = new HashMap<String, String>();
-		String key = "";
-		
-		for (String str : kitDataArr) {
-			String[] items = str.split(",");
-			key = items[0];
-			map.put(key, "true");
-		}
-		return (map);
-	}
-	/*************************************************************************************************************************************************************/
 public HashMap<String, String> getTotals(List<AssetData> assetList) {
 	HashMap<String, String> map = new HashMap<String, String>();
 	int rtnArrSZ = assetList.size();
@@ -404,10 +391,10 @@ public HashMap<String, String> getTotals(List<AssetData> assetList) {
 }
 	
 	
-	
 /*************************************************************************************************************************************************************/
-public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List<Pair<ContractData, List<AssetData> >> rtnPair, String opt, String dispFlag,  HashMap<String, String> cMap  ) throws IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List<Pair<ContractData, List<AssetData> >> rtnPair, String opt  ) throws IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 	HashMap<String, String> rtnMap = new HashMap<String, String>();
+	HashMap<String, String> rtnMap2 = new HashMap<String, String>();
 	DecimalFormat df = new DecimalFormat("$###,##0.00");
 	String cells = "";
 	String xDataItem = null;
@@ -418,12 +405,11 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 	String excel = null;
 	String rowColor = null;
 	String model = "";
-	String[] dispArr = null;
-	int n = 0;
+	int newCode = 109;
 	//String formUrlValue = "/nbvadetail_flex.jsp" ;
 	String formUrlValue = "/nbvadetail_update.jsp" ;
 	int listArrSZ = rtnPair.size();
-	if (listArrSZ > 0) {
+	if (listArrSZ > 0) {	
 		//cells +="  <form name=\"getAsset\" enctype=\"multipart/form-data\" method=\"POST\" action=\"/nbvacode/nbvamod\" > ";
 		cells +="  <form name=\"getAsset\"  method=\"POST\" action=\"/nbvacode/nbvamod\" > ";
 		int rtnArrSZ = rtnPair.get(0).getRight().size();
@@ -431,24 +417,28 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 		assetList	= rtnPair.get(0).getRight();		 
 				 
 		rtnMap = getTotals( assetList);
-				
+		rtnMap2 = getCalcTotals( assetList);
+		
 		for (int i = 0; i < listArrSZ; i++ ) {
 			//int rtnArrSZ = rtnPair.get(i).getRight().size();
 			//List<AssetData> assetList = new ArrayList<AssetData>();
 			//assetList	= rtnPair.get(i).getRight();
 			//out.println("<h5> listArrSZ =" + listArrSZ + " -- rtnArrSZ=" +  rtnArrSZ + "--</h5>");
-			 
-			cells +="<tr bgcolor=" + rowOdd + ">";
+			
+				cells +="<tr bgcolor=" + rowOdd + ">";
 			cells +="<TD>" + "Totals" + "</td>";
 			cells +="<TD colspan=\"10\">" + "" + "</td>";
 			cells +="<TD>" + rtnMap.get("resTotal") + "</td>";
 			cells +="<TD>" + rtnMap.get("equipTotal") + "</td>";
 			cells +="<TD>" + rtnMap.get("rentalTotal") + "</td>";
-			//cells +="<TD >" + "" + "</td>";
+			cells +="<TD>" + rtnMap2.get("buyTotal") + "</td>";
+			cells +="<TD>" + rtnMap2.get("rollTotal") + "</td>";
+			cells +="<TD>" + rtnMap2.get("rtnTotal") + "</td>";
+			
+			 cells +="<TD colspan=\"1\" >" + "" + "</td>";
 			cells +="  </tr>";
-				
-			String dCode = "";
-			String aID = "";
+			
+			
 			for (int j = 0; j < rtnArrSZ; j++ ) {
 				AssetData asset = new AssetData();
 				asset = assetList.get(j);
@@ -456,18 +446,64 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 				//System.out.println("*** AssetReturn: CustomerID=" + asset.getCustomerID() + "--");
 				model = asset.getModel();
 				//System.out.println("*** AssetReturn: Model ->" + model + "--");
-				aID =  Long.toString(asset.getAssetId());
+				
 				rowColor = (j % 2 == 0) ? rowEven : rowOdd;
 				cells +="<tr bgcolor=" + rowColor + ">";
 				cells +="<TD>" + asset.getAssetId() + "</td> ";
-				System.out.println("***!!!!*** AssetReturn: AssetID ->" + aID + "--");
-				if (dispFlag.equals("true")) {
-					
-					dCode = cMap.get(aID );
-					
-					cells +="<TD>" + dCode + "</td> ";
-				} else {
-					
+				cells +="<TD>" + asset.getDispCode() + "</td> ";
+				
+				cells +="<TD>" + asset.getEquipType() + "</td> ";
+				//cells +="<TD>" + asset.getCustomerID() + "</td> ";
+				cells +="<TD>" + asset.getEquipDesc() + "</td> ";
+				if(hm.containsKey(model)){
+		           // System.out.println("The hashmap contains value:" + model);
+		            cells +="<TD>"  ;
+		            cells +="  <form enctype=\"multipart/form-data\" method=\"get\"    action="   +  formUrlValue   +   "        > ";
+		            cells +="<input type=\"hidden\" id=\"" + model + "\"  value=\"" + model + "\" />";
+		            //cells +="<input type=\"button\" onclick=\"call(document.getElementById(" + model + ").id)  value="+ model + "/></form>";
+		            cells +="<input class=\"btn2\" type=\"button\"  value=\""+ model + "\" onclick=\" call(document.getElementById('" + model+ "').id)       \"  ></form>";
+		            
+		        /*
+		          
+		 		   <input type="hidden" id="{APP_CONTRACT_NUMBER}"     value="{APP_CONTRACT_NUMBER}"       /> 
+		 		   <input type="button" onclick="call(document.getElementById('{APP_CONTRACT_NUMBER}').id)" value="Get Data"/> 
+		 	    </form>
+		 	    */
+		 	    
+		            cells +="  </td> ";
+		        } else {
+					cells +="<TD>" + asset.getModel() + "</td> ";
+		        }
+				
+				cells +="<TD>" + asset.getSerNum().replaceAll("null", "") + "</td> ";
+				cells +="<TD>" + asset.getQty() + "</td> ";
+				cells +="<TD>" + asset.getEquipAddr1() + "</td> ";
+				cells +="<TD>" + asset.getEquipCity() + "</td> ";
+				cells +="<TD>" + asset.getEquipState() + "</td> ";
+				cells +="<TD>" + asset.getEquipZip() + "</td>  ";
+		
+				
+				String residAmt_df = Olyutil.decimalfmt(asset.getResidAmt(), "$###,##0.00");
+				//System.out.println("*** ResidualAmt=" + asset.getResidAmt()   + "FMT:" + residAmt_df );
+				cells +="<TD>" + residAmt_df + "</td>  ";
+				
+		 
+				String equipCost_df = Olyutil.decimalfmt(asset.getEquipCost(), "$###,##0.00");
+				
+				
+				cells +="<TD>" + equipCost_df  + "</td>  ";
+	 
+				String rentalAmt_df  = Olyutil.decimalfmt(asset.getaRentalAmt(), "$###,##0.00");
+				cells +="<TD>" + rentalAmt_df+ "</td>  ";
+			 
+				
+				//cells +="<TD>" + asset.getDispCode() + "</td>  ";
+				
+				/*
+				
+				// Drop down for future use
+				 cells +="  <form enctype=\"multipart/form-data\" method=\"get\" > ";
+				//cells +="<TD>  <input type=\"text\" name=\" dispCode\"    value=\"" + asset.getDispCode() + "\">  </td> ";
 					String code = "";
 					if (asset.getDispCode() == 0) {
 						code = "Rollover";
@@ -477,59 +513,77 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 						code = "Return";
 					}
 				
-					 //cells +="<TD> 	<select  name=\"dispCodeArr_"  + n++  + "\" > "; 
-					// cells +="<TD> 	<select  name=\"dispCodeArr_"  + n  + "\"   id=\"dispCodeArr_"  + n  + "\"             > "; 
-					
-					 cells +="<TD> 	<select  name=\"dispCodeArr_"   + Long.toString(asset.getAssetId() )  + "\"  > "; 
-					  n++;
-					cells +="<option value=\"" + asset.getDispCode() + "\" selected    > " +code+    " </option>  ";
-					
-					
+					cells +="<TD> 	<select  name=\"dispCode\" > "; 
+					cells +="<option value=\" " + asset.getDispCode() + " \" selected    > " +code+    " </option>  ";
 					cells +="<option value=\"0\">Rollover</option>  ";
 					cells +="<option value=\"1\">Buyout</option>  ";
 					cells +="<option value=\"2\">Return</option>  ";
 					cells +=" </select> </td> ";
-				}
 				
-				cells +="<TD>" + asset.getEquipType() + "</td> ";
-				cells +="<TD>" + asset.getEquipDesc() + "</td> ";
 				
-				cells +="<TD>" + asset.getModel() + "</td> ";
-	      
-			
-			cells +="<TD>" + asset.getSerNum().replaceAll("null", "") + "</td> ";
-			cells +="<TD>" + asset.getQty() + "</td> ";
-			cells +="<TD>" + asset.getEquipAddr1() + "</td> ";
-			cells +="<TD>" + asset.getEquipCity() + "</td> ";
-			cells +="<TD>" + asset.getEquipState() + "</td> ";
-			cells +="<TD>" + asset.getEquipZip() + "</td>  ";
-	
-			
-			String residAmt_df = Olyutil.decimalfmt(asset.getResidAmt(), "$###,##0.00");
-			//System.out.println("*** ResidualAmt=" + asset.getResidAmt()   + "FMT:" + residAmt_df );
-			cells +="<TD>" + residAmt_df + "</td>  ";
-			
 	 
-			String equipCost_df = Olyutil.decimalfmt(asset.getEquipCost(), "$###,##0.00");
-			
-			
-			cells +="<TD>" + equipCost_df  + "</td>  ";
+				String fp  = Olyutil.decimalfmt(asset.getFloorPrice(), "$###,##0.00");
+				
+				*/
+				
+				//cells +="<TD>" + asset.getTermDate() + "</td> ";
+				
+				String roll  = Olyutil.decimalfmt(asset.getRollPrice(), "$###,##0.00");
+				String buy  = Olyutil.decimalfmt(asset.getBuyPrice(), "$###,##0.00");
+				String rtn  = Olyutil.decimalfmt(asset.getRtnPrice(), "$###,##0.00");
+				
+				
+				cells +="<TD>" + roll  + "</td> ";
+				cells +="<TD>" + buy  + "</td> ";
+				cells +="<TD>" + rtn  + "</td> ";
+				
+				//cells +="<TD>" + fp  + "</td> ";
+				
+				cells +="<TD>" + opt  + "</td> ";
+				
+				
+				
+				
+				
+				cells +=" </tr> ";
+				
+				/*
+				for (int k = 0; k < rtnArrSZ; k++ ) {
+					displayObj(asset);
+				}
+				*/
+				
  
-			String rentalAmt_df  = Olyutil.decimalfmt(asset.getaRentalAmt(), "$###,##0.00");
-			cells +="<TD>" + rentalAmt_df+ "</td>  ";
-		 
-				
-				
-			}
+ 			}
 		}
-		cells +="<TR><TD COLSPAN=\"17\" align=\"center\">           </td></tr>  ";
-		cells +="<input type=\"hidden\" id=\"num\" name=\"num\"  value=" +  n + "> ";
-		cells +="<TR><TD COLSPAN=\"17\" align=\"center\">  <input type=\"Submit\" name=\" dispCode2\"   value=\" Update\"   >      </td></tr>";
-		cells +=" </form>";
-		 
-	}
+		cells +="<TR><TD COLSPAN=\"17\" align=\"center\">     >      </td></tr> </form>";
+		//cells +="<TR><TD COLSPAN=\"17\" align=\"center\">  <input type=\"Submit\" name=\" dispCode\"   value=\" Update\"   >      </td></tr> </form>";
+	
+ 	}
+		
 	return(cells);
 }
+/*************************************************************************************************************************************************************/
+// Invoke: strArr = GetKitData.getKitData(fileName);
+	public static ArrayList<String> getKitData(String fileName) throws IOException {
+
+		ArrayList<String> strArr = new ArrayList<String>();
+		strArr = Olyutil.readInputFile(fileName);
+		return (strArr);
+	}
+/*************************************************************************************************************************************************************/
+
+	public static HashMap<String, String> getKitHash(ArrayList<String> kitDataArr  ) throws IOException {
+		HashMap<String, String> map = new HashMap<String, String>();
+		String key = "";
+		
+		for (String str : kitDataArr) {
+			String[] items = str.split(",");
+			key = items[0];
+			map.put(key, "true");
+		}
+		return (map);
+	}
 
 /*************************************************************************************************************************************************************/
 
@@ -546,16 +600,14 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 	String filePath = "C:\\Java_Dev\\props\\headers\\NBVA_ContractHrd.txt";
 	ArrayList<String> headerArr = readHeader(filePath);
   
-	String filePath2 = "C:\\Java_Dev\\props\\headers\\NBVA_AssetHrdCode.txt";
+	String filePath2 = "C:\\Java_Dev\\props\\headers\\NBVA_AssetHrdCodeResult.txt";
 	ArrayList<String> headerArr2 = readHeader(filePath2);
 	kitArr = getKitData(kitFileName);
 	map = getKitHash(kitArr);
 	
 	//ArrayList<String> list2 = new ArrayList<String>();
 	 List<Pair<ContractData, List<AssetData> >> list = (List<Pair<ContractData, List<AssetData> >>) session.getAttribute("rtnPair");
-	 request.getSession().setAttribute("rtnPairList", list);
-	 request.getSession().setAttribute("JB", "JB_TEST");
-	 
+
 	 int lsz = list.size();
 	 int rtnArrSZ = 0;
 	 ContractData contractData = new ContractData();
@@ -660,7 +712,7 @@ out.println("</form> </td></tr></table>");
 		out.println(header2);
 		out.println("</tr></thead>");
 		out.println("<tbody id=\"report\">");
-		out.println(buildCellsAsset(map, out, list, opt, useCodeData, codeMap)); // build data cells from file
+		out.println(buildCellsAsset(map, out, list, opt)); // build data cells from file
 		
 		out.println("</tbody></table><BR>"); // Close Table
 	

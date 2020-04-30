@@ -134,8 +134,8 @@ function ajaxFunction(){
 <BR>
 
 
-	<!--   <form name="actionform" method="get" action="nbvacode" name=id'>  -->
-<form name="actionform" method="post" enctype="multipart/form-data" action="nbvacode"  > 
+	<form name="actionform" method="get" action="nbvacode" name=id'>
+
 <BR>
 
 

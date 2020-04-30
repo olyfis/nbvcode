@@ -24,19 +24,22 @@
 	String termPlusSpan =  (String) session.getAttribute("termPlusSpan");
 	//DecimalFormat df = new DecimalFormat("$###,##0.00");
 	String opt =  (String) session.getAttribute("opt");
-	HashMap<String, String> codeMap = new HashMap<String, String>();
-	codeMap = (HashMap<String, String> )session.getAttribute("codeMapRtn");
+	HashMap<String, String> CodeMap = new HashMap<String, String>();
+	CodeMap = (HashMap<String, String> )session.getAttribute("codeMapRtn");
 	String useCodeData = (String) session.getAttribute("useCodeData");
 	
-	Set<String> keys = codeMap.keySet();  //get all keys
-	for(String key: keys) {	
-	    System.out.println("**----** Key=" + key + "-- Value=" + codeMap.get(key) + "--");
+	Set<String> keys = CodeMap.keySet();  //get all keys
+	for(String key: keys) {
+	
+	    System.out.println("**----** Key=" + key + "-- Value=" + CodeMap.get(key) + "--");
 	}
 	
+	
+	
 	if (useCodeData.equals("true")) {
-		System.out.println("^^^^^^^ Using code data-- CM_ID="  + codeMap.get("asset"));	
+		System.out.println("^^^^^^^ Using code data-- CM_ID="  + CodeMap.get("asset"));	
 	} else {
-		System.out.println("^^^^^^^ Not using code data-- CM_ID="  + codeMap.get("asset") +"-- UCD=" +  useCodeData);	
+		System.out.println("^^^^^^^ Not using code data-- CM_ID="  + CodeMap.get("asset") +"-- UCD=" +  useCodeData);	
 	}
 	
 	
@@ -406,7 +409,7 @@ public HashMap<String, String> getTotals(List<AssetData> assetList) {
 	
 	
 /*************************************************************************************************************************************************************/
-public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List<Pair<ContractData, List<AssetData> >> rtnPair, String opt, String dispFlag,  HashMap<String, String> cMap  ) throws IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List<Pair<ContractData, List<AssetData> >> rtnPair, String opt  ) throws IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 	HashMap<String, String> rtnMap = new HashMap<String, String>();
 	DecimalFormat df = new DecimalFormat("$###,##0.00");
 	String cells = "";
@@ -447,8 +450,7 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 			//cells +="<TD >" + "" + "</td>";
 			cells +="  </tr>";
 				
-			String dCode = "";
-			String aID = "";
+			
 			for (int j = 0; j < rtnArrSZ; j++ ) {
 				AssetData asset = new AssetData();
 				asset = assetList.get(j);
@@ -456,40 +458,34 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 				//System.out.println("*** AssetReturn: CustomerID=" + asset.getCustomerID() + "--");
 				model = asset.getModel();
 				//System.out.println("*** AssetReturn: Model ->" + model + "--");
-				aID =  Long.toString(asset.getAssetId());
+				
 				rowColor = (j % 2 == 0) ? rowEven : rowOdd;
 				cells +="<tr bgcolor=" + rowColor + ">";
 				cells +="<TD>" + asset.getAssetId() + "</td> ";
-				System.out.println("***!!!!*** AssetReturn: AssetID ->" + aID + "--");
-				if (dispFlag.equals("true")) {
-					
-					dCode = cMap.get(aID );
-					
-					cells +="<TD>" + dCode + "</td> ";
-				} else {
-					
-					String code = "";
-					if (asset.getDispCode() == 0) {
-						code = "Rollover";
-					} else if (asset.getDispCode() == 1 ) { 
-						code = "Buyout";
-					} else if (asset.getDispCode() == 2 ) { 
-						code = "Return";
-					}
 				
-					 //cells +="<TD> 	<select  name=\"dispCodeArr_"  + n++  + "\" > "; 
-					// cells +="<TD> 	<select  name=\"dispCodeArr_"  + n  + "\"   id=\"dispCodeArr_"  + n  + "\"             > "; 
-					
-					 cells +="<TD> 	<select  name=\"dispCodeArr_"   + Long.toString(asset.getAssetId() )  + "\"  > "; 
-					  n++;
-					cells +="<option value=\"" + asset.getDispCode() + "\" selected    > " +code+    " </option>  ";
-					
-					
-					cells +="<option value=\"0\">Rollover</option>  ";
-					cells +="<option value=\"1\">Buyout</option>  ";
-					cells +="<option value=\"2\">Return</option>  ";
-					cells +=" </select> </td> ";
+				
+				String code = "";
+				if (asset.getDispCode() == 0) {
+					code = "Rollover";
+				} else if (asset.getDispCode() == 1 ) { 
+					code = "Buyout";
+				} else if (asset.getDispCode() == 2 ) { 
+					code = "Return";
 				}
+			
+				 //cells +="<TD> 	<select  name=\"dispCodeArr_"  + n++  + "\" > "; 
+				// cells +="<TD> 	<select  name=\"dispCodeArr_"  + n  + "\"   id=\"dispCodeArr_"  + n  + "\"             > "; 
+				
+				 cells +="<TD> 	<select  name=\"dispCodeArr_"   + Long.toString(asset.getAssetId() )  + "\"  > "; 
+				  n++;
+				cells +="<option value=\"" + asset.getDispCode() + "\" selected    > " +code+    " </option>  ";
+				
+				
+				cells +="<option value=\"0\">Rollover</option>  ";
+				cells +="<option value=\"1\">Buyout</option>  ";
+				cells +="<option value=\"2\">Return</option>  ";
+				cells +=" </select> </td> ";
+				
 				
 				cells +="<TD>" + asset.getEquipType() + "</td> ";
 				cells +="<TD>" + asset.getEquipDesc() + "</td> ";
@@ -660,7 +656,7 @@ out.println("</form> </td></tr></table>");
 		out.println(header2);
 		out.println("</tr></thead>");
 		out.println("<tbody id=\"report\">");
-		out.println(buildCellsAsset(map, out, list, opt, useCodeData, codeMap)); // build data cells from file
+		out.println(buildCellsAsset(map, out, list, opt)); // build data cells from file
 		
 		out.println("</tbody></table><BR>"); // Close Table
 	

@@ -134,8 +134,8 @@ function ajaxFunction(){
 <BR>
 
 
-	<!--   <form name="actionform" method="get" action="nbvacode" name=id'>  -->
-<form name="actionform" method="post" enctype="multipart/form-data" action="nbvacode"  > 
+	<form name="actionform" method="get" action="nbvacode" name=id'>
+
 <BR>
 
 
@@ -211,22 +211,14 @@ function ajaxFunction(){
   <!-- ********************************************************************************************************************************************************* -->
      
      <tr>
+ 
   <td width="20" valign="bottom"> <b>Enter Invoice Number:</b> </td> 
   <td width="20" valign="bottom">  
+   
       <CENTER>  <input name="invoice" type="text"   /> </CENTER>
+     
   </td>
   </tr>
-      <!-- ********************************************************************************************************************************************************* -->
-     
-      <tr>
-  <td width="20" valign="bottom"> <b>Select Disposition Code Update File:</b> </td> 
-  <td width="20" valign="bottom">  
-      <CENTER>  <input type="file" name="file" size="25" />
-     
-      </CENTER>
-  </td>
-  </tr>
-     
      
      
      <!-- ********************************************************************************************************************************************************* -->
@@ -248,9 +240,7 @@ function ajaxFunction(){
 	   <td> 
 	  --> 
 	 <CENTER> 
-    <INPUT type="submit" value="Submit">  
-     <input type="reset" value="Clear"/>
-     </CENTER>
+    <INPUT type="submit" value="Submit">  </CENTER>
      </td>  
 	
   </tr>

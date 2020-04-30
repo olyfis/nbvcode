@@ -25,7 +25,7 @@
 			
 			  <td width="20" valign="bottom"> <b>Enter Contract Number:</b> </td> 
   <td width="20" valign="bottom">  
-     <%   out.println("<input name=\"date2\" id=\"date2\" type=\"text\" value=\"Click for Calendar\" onclick=\"pureJSCalendar.open('yyyy-MM-dd', 20, 30, 7, '2017-1-1', '2025-12-31', 'date2', 20)\"   />" );
+     <%   out.println("<input name=\"startDate\" id=\"date2\" type=\"text\" value=\"Click for Calendar\" onclick=\"pureJSCalendar.open('yyyy-MM-dd', 20, 30, 7, '2017-1-1', '2025-12-31', 'date2', 20)\"   />" );
      %>
     <!--  <CENTER>  <input name="id" type="text"  value="101-0009442-019" /> </CENTER>  -->
       <CENTER>  <input name="id" type="text"   /> </CENTER>
@@ -35,3 +35,5 @@
 		<input type="hidden" name="hiddenField" value="dummy">
 	</form>
 	<BR>
+</body>
+</html>
