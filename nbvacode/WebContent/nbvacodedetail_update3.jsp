@@ -461,17 +461,14 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 				cells +="<tr bgcolor=" + rowColor + ">";
 				cells +="<TD>" + asset.getAssetId() + "</td> ";
 				//System.out.println("***!!!!*** AssetReturn: AssetID ->" + aID + "--");
-				String code = "";
-				//if (dispFlag.equals("true")) {
+				if (dispFlag.equals("true")) {
 					
 					dCode = cMap.get(aID );
-					 
-					
 					//asset.setDispCode(Olyutil.strToInt(dCode));
-					//cells +="<TD>" + dCode + "</td> ";
-				//} else {
-				if (! dispFlag.equals("true")) {	
+					cells +="<TD>" + dCode + "</td> ";
+				} else {
 					
+					String code = "";
 					if (asset.getDispCode() == 0) {
 						code = "Rollover";
 					} else if (asset.getDispCode() == 1 ) { 
@@ -479,35 +476,20 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 					} else if (asset.getDispCode() == 2 ) { 
 						code = "Return";
 					}
-				} else {
-					
-					if (Olyutil.strToInt(dCode) == 0) {
-						code = "Rollover";
-					} else if (Olyutil.strToInt(dCode) == 1 ) { 
-						code = "Buyout";
-					} else if (Olyutil.strToInt(dCode) == 2 ) { 
-						code = "Return";
-					}
-					
-				}
-					
-					
-					
-					System.out.println("*** Asset=" + aID + "-- DCODE=" +dCode + "-- Code="  + code  + "--" );
+				
 					 //cells +="<TD> 	<select  name=\"dispCodeArr_"  + n++  + "\" > "; 
 					// cells +="<TD> 	<select  name=\"dispCodeArr_"  + n  + "\"   id=\"dispCodeArr_"  + n  + "\"             > "; 
 					
 					 cells +="<TD> 	<select  name=\"dispCodeArr_"   + Long.toString(asset.getAssetId() )  + "\"  > "; 
 					  n++;
-					  
-					//cells +="<option value=\"" + asset.getDispCode() + "\" selected    > " +code+    " </option>  ";
-cells +="<option value=\"" + dCode + "\" selected    > " +code+    " </option>  ";				
+					cells +="<option value=\"" + asset.getDispCode() + "\" selected    > " +code+    " </option>  ";
+					
 					
 					cells +="<option value=\"0\">Rollover</option>  ";
 					cells +="<option value=\"1\">Buyout</option>  ";
 					cells +="<option value=\"2\">Return</option>  ";
 					cells +=" </select> </td> ";
-				//}
+				}
 				
 				cells +="<TD>" + asset.getEquipType() + "</td> ";
 				cells +="<TD>" + asset.getEquipDesc() + "</td> ";

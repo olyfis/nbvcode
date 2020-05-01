@@ -705,9 +705,9 @@ public class NbvaCodeDisp extends HttpServlet {
 						System.out.println("!!**^^**  Error: FileName=" + paramMap.get("filename"));
 						
 					}
-					System. out.println("!!**^^**  FN=" + paramMap.get("filename"));
+					//System. out.println("!!**^^**  FN=" + paramMap.get("filename"));
 				} else {
-					System.out.println("!!**^^** STAT=false" );
+					//System.out.println("!!**^^** STAT=false" );
 					request.getRequestDispatcher(dispatchJSP_Error).forward(request, response);
 				}	
 				
@@ -775,7 +775,7 @@ public class NbvaCodeDisp extends HttpServlet {
 						  opt = contractCalcs( effDate, termDate, termPlusSpan, rtnPair);
 					}	
 					request.getSession().setAttribute("opt", opt);
-					System.out.println("*** Dispatch to:" + dispatchJSP);
+					//System.out.println("*** Dispatch to:" + dispatchJSP);
 					
 					request.getRequestDispatcher(dispatchJSP).forward(request, response);	
 				} else {
