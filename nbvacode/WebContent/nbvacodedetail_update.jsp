@@ -493,7 +493,7 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 					
 					
 					
-					System.out.println("*** Asset=" + aID + "-- DCODE=" +dCode + "-- Code="  + code  + "--" );
+					//System.out.println("*** Asset=" + aID + "-- DCODE=" +dCode + "-- Code="  + code  + "--" );
 					 //cells +="<TD> 	<select  name=\"dispCodeArr_"  + n++  + "\" > "; 
 					// cells +="<TD> 	<select  name=\"dispCodeArr_"  + n  + "\"   id=\"dispCodeArr_"  + n  + "\"             > "; 
 					

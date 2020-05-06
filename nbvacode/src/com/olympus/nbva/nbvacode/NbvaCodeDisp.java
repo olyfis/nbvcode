@@ -540,7 +540,7 @@ public class NbvaCodeDisp extends HttpServlet {
 	        //String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
 	        String uploadPath = "C:\\tmp\\" + UPLOAD_DIRECTORY;
 	        
-	        System.out.println("***^^^*** UploadPath=" + uploadPath);
+	        //System.out.println("***^^^*** UploadPath=" + uploadPath);
 	        // creates the directory if it does not exist
 	        File uploadDir = new File(uploadPath);
 	        if (!uploadDir.exists()) {
@@ -583,7 +583,7 @@ public class NbvaCodeDisp extends HttpServlet {
 							filePath = uploadPath + File.separator + fileName;
 							File storeFile = new File(filePath);
 							item.write(storeFile);
-							System.out.println("***!!!*** Add fileName to map:" + fileName + "--");	
+							//System.out.println("***!!!*** Add fileName to map:" + fileName + "--");	
 							paramMap.put("filename", fileName);
 							paramMap.put("filepath", filePath);
 							request.setAttribute("message",
@@ -683,7 +683,7 @@ public class NbvaCodeDisp extends HttpServlet {
 				if (stat) {
 					effDate = paramMap.get("eDate");
 					idVal = paramMap.get("id");
-					System.out.println("!!**^^** STAT=true" );
+					//System.out.println("!!**^^** STAT=true" );
 					request.getSession().setAttribute("paramMap", paramMap);
 					//System.out.println("!!**^^** Date=" + paramMap.get("eDate"));
 					//System.out.println("!!**^^** ID=" + paramMap.get("id"));
