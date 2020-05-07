@@ -384,6 +384,7 @@ public HashMap<String, String> getTotals(List<AssetData> assetList) {
 	String resTotal_df = Olyutil.decimalfmt(resTotal, "$###,##0.00");
 	String equipTotal_df = Olyutil.decimalfmt(equipTotal, "$###,##0.00");
 	String rentalTotal_df = Olyutil.decimalfmt(rentalTotal, "$###,##0.00");
+	
 	map.put("resTotal", resTotal_df);
 
 	map.put("equipTotal", equipTotal_df);
@@ -421,6 +422,11 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 		rtnMap = getTotals( assetList);
 		rtnMap2 = getCalcTotals( assetList);
 		
+		long id = rtnPair.get(0).getRight().get(0).getAssetId();
+		int d = rtnPair.get(0).getRight().get(0).getDispCode();
+		System.out.println("*** Asset=" + id + "-- DCODE=" + d  + "--");
+		
+		
 		for (int i = 0; i < listArrSZ; i++ ) {
 			//int rtnArrSZ = rtnPair.get(i).getRight().size();
 			//List<AssetData> assetList = new ArrayList<AssetData>();
@@ -430,8 +436,9 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 				cells +="<tr bgcolor=" + rowOdd + ">";
 			cells +="<TD>" + "Totals" + "</td>";
 			cells +="<TD colspan=\"10\">" + "" + "</td>";
-			cells +="<TD>" + rtnMap.get("resTotal") + "</td>";
 			cells +="<TD>" + rtnMap.get("equipTotal") + "</td>";
+			cells +="<TD>" + rtnMap.get("resTotal") + "</td>";
+			
 			cells +="<TD>" + rtnMap.get("rentalTotal") + "</td>";
 			cells +="<TD>" + rtnMap2.get("buyTotal") + "</td>";
 			cells +="<TD>" + rtnMap2.get("rollTotal") + "</td>";
@@ -449,10 +456,15 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 				model = asset.getModel();
 				//System.out.println("*** AssetReturn: Model ->" + model + "--");
 				
+				System.out.println("***^^^^^ Asset DispCode=" +asset.getDispCode() + "--");
+				
+				
 				rowColor = (j % 2 == 0) ? rowEven : rowOdd;
 				cells +="<tr bgcolor=" + rowColor + ">";
 				cells +="<TD>" + asset.getAssetId() + "</td> ";
-				cells +="<TD>" + asset.getDispCode() + "</td> ";
+				//cells +="<TD>" + asset.getDispCode() + "</td> ";
+				cells +="<TD>" + Integer.toString(asset.getDispCode()) + "</td> ";
+				
 				
 				cells +="<TD>" + asset.getEquipType() + "</td> ";
 				//cells +="<TD>" + asset.getCustomerID() + "</td> ";
@@ -558,7 +570,7 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
  
  			}
 		}
-		cells +="<TR><TD COLSPAN=\"17\" align=\"center\">     >      </td></tr> </form>";
+		cells +="<TR><TD COLSPAN=\"17\" align=\"center\">            </td></tr> </form>";
 		//cells +="<TR><TD COLSPAN=\"17\" align=\"center\">  <input type=\"Submit\" name=\" dispCode\"   value=\" Update\"   >      </td></tr> </form>";
 	
  	}
@@ -599,10 +611,10 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 <!-- <BR> <font color="red"> Note: Some queries take more time to run. Please be patient.</font>   -->
 
 <%
-	String filePath = "C:\\Java_Dev\\props\\headers\\NBVA_ContractHrd.txt";
+	String filePath = "C:\\Java_Dev\\props\\headers\\NBVA\\NBVA_ContractHrd.txt";
 	ArrayList<String> headerArr = readHeader(filePath);
   
-	String filePath2 = "C:\\Java_Dev\\props\\headers\\NBVA_AssetHrdCodeResult.txt";
+	String filePath2 = "C:\\Java_Dev\\props\\headers\\NBVA\\NBVA_AssetHrdCodeResult.txt";
 	ArrayList<String> headerArr2 = readHeader(filePath2);
 	kitArr = getKitData(kitFileName);
 	map = getKitHash(kitArr);

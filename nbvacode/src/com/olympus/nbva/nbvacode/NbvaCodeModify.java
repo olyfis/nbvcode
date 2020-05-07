@@ -86,7 +86,7 @@ public class NbvaCodeModify extends HttpServlet {
 		//String dispCoveVals = request.getParameter("dispCodeArr_0");
 		 
 		
-		 setAssetObj(list, request);
+		// setAssetObj(list, request);
 		 request.getRequestDispatcher(dispatchJSP).forward(request, response);
 			
 		

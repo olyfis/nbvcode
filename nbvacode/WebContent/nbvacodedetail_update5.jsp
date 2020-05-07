@@ -50,9 +50,8 @@
 <title><%=title%></title>
 <!--  	101-0015003-034 -->
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<!--   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.9.1/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.9.1/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="includes/js/tableFilter.js"></script>
--->
 <style><%@include file="includes/css/reports.css"%></style>
 <style><%@include file="includes/css/table.css"%></style>
 <style><%@include file="includes/css/header.css"%></style>
@@ -475,9 +474,7 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 					//cells +="<TD>" + dCode + "</td> ";
 				//} else {
 					 //System.out.println("***!!!!*** DispCode=" + asset.getDispCode() + "--");
-				
-					// System.out.println("*!!!!!!!!! AID=" +  aID + "-- Asset=" + asset.getAssetId()  + "-- DC=" + asset.getDispCode() + "--");
-				//if (! dispFlag.equals("true")) {	
+				if (! dispFlag.equals("true")) {	
 					
 					if (asset.getDispCode() == 0) {
 						code = "Rollover";
@@ -487,12 +484,9 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 						code = "Return";
 					} else if (asset.getDispCode() == -9) {
 						code = "Null";
-					} else {
-						code = "Misc" + "("    + asset.getDispCode() +  ")";
-						
 					}
-				//} else { // read from CSV file
-					/*
+				} else { // read from CSV file
+					
 					if (Olyutil.strToInt(dCode) == 0) {
 						code = "*Rollover";
 					} else if (Olyutil.strToInt(dCode) == 1 ) { 
@@ -500,9 +494,12 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 					} else if (Olyutil.strToInt(dCode) == 2 ) { 
 						code = "*Return";
 					} else if (asset.getDispCode() == -9) {
+						code = "*Null";
+						System.out.println("*!!!!!!!!! Asset=" + asset.getAssetId()  + "-- DC=" + asset.getDispCode() + "--");
+					}
 					
-				 }
-					*/
+				}
+					
 					
 					
 					//System.out.println("*** Asset=" + aID + "-- DCODE=" +dCode + "-- Code="  + code  + "--" );
@@ -511,13 +508,9 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 					
 					 cells +="<TD> 	<select  name=\"dispCodeArr_"   + Long.toString(asset.getAssetId() )  + "\"  > "; 
 					  n++;
-					  System.out.println("*!!!!!!!!! AID=" +  aID + "-- Asset=" + asset.getAssetId()  + "-- DC=" +dCode +"--");		
-					  if (code.equals("null")) {
-						  
-						  dCode = "-8" ;
-					  }  
+					  
 					//cells +="<option value=\"" + asset.getDispCode() + "\" selected    > " +code+    " </option>  ";
-				cells +="<option value=\"" + dCode + "\" selected    > " +code+    " </option>  ";				
+cells +="<option value=\"" + dCode + "\" selected    > " +code+    " </option>  ";				
 					
 					cells +="<option value=\"0\">Rollover</option>  ";
 					cells +="<option value=\"1\">Buyout</option>  ";
@@ -701,14 +694,8 @@ out.println("</form> </td></tr></table>");
 		out.println("</div>");
 	
 		/**********************************************************************************************************************************************************/
-/*
-		long id = list.get(0).getRight().get(0).getAssetId();
-		int d = list.get(0).getRight().get(0).getDispCode();
-		System.out.println("*** A=" + id + "-- DC=" + d  + "--");
-		
-		*/
-		
-		
+
+	
 	} else {
 		out.println("No Asset data to display." + "<br>");
 

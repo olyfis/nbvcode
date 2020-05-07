@@ -17,7 +17,6 @@
 	ArrayList<String> tokens = new ArrayList<String>();
 	ArrayList<String> kitArr = new ArrayList<String>();
 	String formUrl =  (String) session.getAttribute("formUrl");
-	String formUrlDisp =  (String) session.getAttribute("formUrlDisp");
 	double sumTotal = (double) session.getAttribute("sumTotal");
  	String kitFileName = "C:\\Java_Dev\\props\\kitdata\\kitdata.csv";
 	HashMap<String, String> map = new HashMap<String, String>();
@@ -50,9 +49,8 @@
 <title><%=title%></title>
 <!--  	101-0015003-034 -->
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<!--   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.9.1/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.9.1/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="includes/js/tableFilter.js"></script>
--->
 <style><%@include file="includes/css/reports.css"%></style>
 <style><%@include file="includes/css/table.css"%></style>
 <style><%@include file="includes/css/header.css"%></style>
@@ -239,7 +237,7 @@ public void  buildCellsTotals( JspWriter out, ContractData contract, String form
 
 }
 /*************************************************************************************************************************************************************/
-public void  buildCellsContract( JspWriter out, ContractData contract, String formUrlDisp, int mthRem  ) throws IOException {
+public void  buildCellsContract( JspWriter out, ContractData contract, String formUrl, int mthRem  ) throws IOException {
 	//DecimalFormat df = new DecimalFormat("$###,##0.00");
 	
 	String cells = "";
@@ -330,19 +328,18 @@ public void  buildCellsContract( JspWriter out, ContractData contract, String fo
 	out.println( "<td class=\"a\">"  + contract.getPurOption() + "</td></tr>");
 	
 	
-	/*
- 
+	
+ /*
 	out.println("<tr>");
-	out.println("<th class=\" " + style + "  \" >Create DispCode File <br> May take a while to build file.</th>");	
+	out.println("<th class=\" " + style + "  \" >Save as Excel File <br> May take a while to build file.</th>");	
 	out.println( "<td class=\"a\"> ");
-	out.println(" <form name=\"dispForm\"    enctype=\"multipart/form-data\"   method=\"get\" action=" +   formUrlDisp  +  " >    ");
- 	out.println("<input type=\"submit\" value=\"Create DispCode File\" class=\"btn\" /> ");
-	 
+	out.println(" <form name=\"excelForm\"    enctype=\"multipart/form-data\"   method=\"get\" action=" +   formUrl  +  " >    ");
+ 	out.println("<input type=\"submit\" value=\"Save Excel File\" class=\"btn\" /> ");
+	*/
 	out.println("</table>");
 	//out.println("</form> </td></tr></table>");
 	
 	out.println( "  </td></tr>");
-	*/
 	//System.out.println("*** boDate=" + contract.getBuyoutDate() + "--");
 }
 
@@ -474,10 +471,8 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 					//asset.setDispCode(Olyutil.strToInt(dCode));
 					//cells +="<TD>" + dCode + "</td> ";
 				//} else {
-					 //System.out.println("***!!!!*** DispCode=" + asset.getDispCode() + "--");
-				
-					// System.out.println("*!!!!!!!!! AID=" +  aID + "-- Asset=" + asset.getAssetId()  + "-- DC=" + asset.getDispCode() + "--");
-				//if (! dispFlag.equals("true")) {	
+					System.out.println("***!!!!*** DispCode=" + asset.getDispCode() + "--");
+				if (! dispFlag.equals("true")) {	
 					
 					if (asset.getDispCode() == 0) {
 						code = "Rollover";
@@ -487,12 +482,9 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 						code = "Return";
 					} else if (asset.getDispCode() == -9) {
 						code = "Null";
-					} else {
-						code = "Misc" + "("    + asset.getDispCode() +  ")";
-						
 					}
-				//} else { // read from CSV file
-					/*
+				} else { // read from CSV file
+					
 					if (Olyutil.strToInt(dCode) == 0) {
 						code = "*Rollover";
 					} else if (Olyutil.strToInt(dCode) == 1 ) { 
@@ -500,9 +492,11 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 					} else if (Olyutil.strToInt(dCode) == 2 ) { 
 						code = "*Return";
 					} else if (asset.getDispCode() == -9) {
+						code = "*Null";
+					}
 					
-				 }
-					*/
+				}
+					
 					
 					
 					//System.out.println("*** Asset=" + aID + "-- DCODE=" +dCode + "-- Code="  + code  + "--" );
@@ -511,13 +505,9 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 					
 					 cells +="<TD> 	<select  name=\"dispCodeArr_"   + Long.toString(asset.getAssetId() )  + "\"  > "; 
 					  n++;
-					  System.out.println("*!!!!!!!!! AID=" +  aID + "-- Asset=" + asset.getAssetId()  + "-- DC=" +dCode +"--");		
-					  if (code.equals("null")) {
-						  
-						  dCode = "-8" ;
-					  }  
+					  
 					//cells +="<option value=\"" + asset.getDispCode() + "\" selected    > " +code+    " </option>  ";
-				cells +="<option value=\"" + dCode + "\" selected    > " +code+    " </option>  ";				
+cells +="<option value=\"" + dCode + "\" selected    > " +code+    " </option>  ";				
 					
 					cells +="<option value=\"0\">Rollover</option>  ";
 					cells +="<option value=\"1\">Buyout</option>  ";
@@ -629,7 +619,7 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 		/* Display Contract Data */
 		out.println("<table class=\"tablesorter\" border=\"1\"  width=\"600\"> <thead> <tr>");
 		out.println("<tbody id=\"report\">");
-		  buildCellsContract(out, contractData, formUrlDisp, mthRem); // build data cells from file
+		  buildCellsContract(out, contractData, formUrl, mthRem); // build data cells from file
 		//out.println(cells);
 		out.println("</tbody></table><BR>"); // Close Table
 
@@ -701,14 +691,8 @@ out.println("</form> </td></tr></table>");
 		out.println("</div>");
 	
 		/**********************************************************************************************************************************************************/
-/*
-		long id = list.get(0).getRight().get(0).getAssetId();
-		int d = list.get(0).getRight().get(0).getDispCode();
-		System.out.println("*** A=" + id + "-- DC=" + d  + "--");
-		
-		*/
-		
-		
+
+	
 	} else {
 		out.println("No Asset data to display." + "<br>");
 

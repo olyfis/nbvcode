@@ -136,11 +136,12 @@ public class NbvaCodeDisp extends HttpServlet {
 
 		
 		/*****************************************************************************************************************************************************/
-		public static AssetData loadAssetObj(String[] line) {
+		public static AssetData loadAssetObj(String[] line, HashMap<String, String> codeMap) {
 			AssetData asset = new AssetData();
 			double equipCost = Olyutil.strToDouble(line[20]);
 			double residual = Olyutil.strToDouble(line[19]);
 			String desc = line[10];
+			String aID = "";
 			
 			if (desc.equals("EUA") || desc.equals("B/O")) {
 				//System.out.println("***^^^*** AssetData: Desc="  +  desc );
@@ -155,6 +156,8 @@ public class NbvaCodeDisp extends HttpServlet {
 			//System.out.println("***^^^*** AssetData: L22="  +  line[22] + "-- Fmt" + Olyutil.strToInteger(line[22] ) );
 			//System.out.println("***^^^*** AssetData: L11="  +  line[11] + "--"   );
 			//System.out.println("***^^^*** AssetData: L12="  +  line[12] + "--"   );
+			
+			
 			
 			 asset.setAssetId(Olyutil.strToLong(line[7]));
 			 asset.setEquipType(line[8]); 
@@ -174,8 +177,41 @@ public class NbvaCodeDisp extends HttpServlet {
 			 asset.setEquipCost(equipCost);
 			 
 			 asset.setaRentalAmt(Olyutil.strToDouble(line[21]));
-			 asset.setDispCode(Olyutil.strToInteger(line[22])); 
-			 //asset.setTermDate( line[23]); 
+			 //System.out.println("***^^^^^^*** DispCode=" + asset.getDispCode() + "-- Orig=" + line[22] + "-- Asset=" + asset.getAssetId() + "--");
+		if (codeMap.size() > 0) {
+			//System.out.println("*** IF Load -- File Uploaded -- CM=" + codeMap.get(line[7]) + "-- SZ=" + codeMap.size() + "-- Asset=" + asset.getAssetId() + "--");
+
+			if (Olyutil.isNullStr(codeMap.get(line[7])) || codeMap.get(line[7]).equals("null")) {
+				asset.setDispCode(-9);
+				// System.out.println("***^^^^^^*** Set DispCode=" + asset.getDispCode() + "--
+				// Orig=" + line[22] + "-- Asset=" + asset.getAssetId() + "--");
+			} else {
+
+				asset.setDispCode(Olyutil.strToInt(codeMap.get(line[7])));
+			}
+			//System.out.println("*** END IF Load -- File Uploaded -- CM=" + codeMap.get(line[7]) + "-- SZ=" + codeMap.size()+ "-- Asset=" + asset.getAssetId() + "--");
+			
+			
+		} else {
+
+			System.out.println("***^^ LOAD Else^^^^*** DispCode=" + asset.getDispCode() + "-- Orig=" + line[22] + "-- Asset="
+					+ asset.getAssetId() + "--");
+			if (Olyutil.isNullStr(line[22]) || line[22].equals("null")) {
+				asset.setDispCode(-9);
+				// System.out.println("***^^^^^^*** Set DispCode=" + asset.getDispCode() + "--
+				// Orig=" + line[22] + "-- Asset=" + asset.getAssetId() + "--");
+			} else {
+				asset.setDispCode(Olyutil.strToInteger(line[22]));
+			}
+			//System.out.println("***^^^LOAD Else SET^^^*** DispCode=" + asset.getDispCode() + "-- Orig=" + line[22] + "-- Asset="+ asset.getAssetId() + "--");
+
+			// System.out.println("***^^^^^^*** Set DispCode=" + asset.getDispCode() +
+			// "--");
+
+		}
+			 
+			 
+			 
 			 return(asset);
 		}
 		/****************************************************************************************************************************************************/
@@ -209,7 +245,7 @@ public class NbvaCodeDisp extends HttpServlet {
 			return(contract);
 		}
 		/****************************************************************************************************************************************************/
-		public static  List<Pair<ContractData, List<AssetData> >> parseData(ArrayList<String> strArr, int sz, String effDate ) {
+		public static  List<Pair<ContractData, List<AssetData> >> parseData(ArrayList<String> strArr, int sz, String effDate, HashMap<String, String> codeMap  ) {
 			String[] strSplitArr = null;
 			ContractData contract = null;
 			AssetData asset = null;
@@ -222,11 +258,11 @@ public class NbvaCodeDisp extends HttpServlet {
 				//System.out.println("*** Data:" + strArr.get(i) );
 				strSplitArr = Olyutil.splitStr(strArr.get(i), ";");
 				purchOption = strSplitArr[26];	
-				 //System.out.println("i=" + i + " -- Value=" + strSplitArr[i]);  
+				//System.out.println("*********** i=" + i + "-- Disp=" + strSplitArr[22] +    "-- Value=" + strSplitArr[i] );  
 				if (i == 0) { // get Contract data
 					contract = loadContractObj(strSplitArr, effDate);
 					
-						asset = loadAssetObj(strSplitArr);
+						asset = loadAssetObj(strSplitArr, codeMap);
 					 
 					if (strSplitArr[24].equals("03")) { 
 						contractStat = true;
@@ -237,11 +273,13 @@ public class NbvaCodeDisp extends HttpServlet {
 						invoiceCodeStat = true;
 					}			
 				} else { // get Asset data && run checks	
-					asset = loadAssetObj(strSplitArr);
+					asset = loadAssetObj(strSplitArr, codeMap);
 				}
 				// Calculate floorPrice
-				if (asset != null) {
-					
+				
+				
+ 				if (asset != null) {
+ 					//System.out.println("*****PARSE******!!## DCODE=" + asset.getDispCode()    +   "-- AID=" + asset.getAssetId()  +  "--");
 					assets.add(asset);	
 				}
 			}
@@ -565,8 +603,8 @@ public class NbvaCodeDisp extends HttpServlet {
 	    				if (item.isFormField()) {
 	    					// Plain request parameters will come here.
 	    					String name = item.getFieldName();
-	    					String value = item.getString();
-	    					//System.out.println("***^^*** Adding Name:" + name + "-- Value:" + value + "--");
+	    					String value = item.getString().trim();
+	    					// System.out.println("***^^*** Adding Name:" + name + "-- Value:" + value + "--");
 	    					paramMap.put(name, value);
 	    		
 	                       //System.out.println("***^^^*** Field:" + name + "-- Value:" + value + "-- FN=" + fileName + "-- FP=" + uploadPath);
@@ -691,18 +729,19 @@ public class NbvaCodeDisp extends HttpServlet {
 					if (! Olyutil.isNullStr(paramMap.get("filename"))) {
 						String filePath = paramMap.get("filepath");
 						uploadFile = true;
-						codeMapRtn = doReadCodeFile(filePath, idVal);
-						int sz = codeMapRtn.size();
+						
+						
 						//System.out.println("!!**^^**  FileName=" + paramMap.get("filename") + "-- SZ=" + sz);
 						//System.out.println("!!**^^**  FilePath=" + filePath); 
 						codeMapRtn = doReadCodeFile(filePath, idVal);
+						int sz = codeMapRtn.size();
 						if (sz > 0) {
 							 //dispatchJSP = "/nbvadetail_code_result.jsp";
 							useCodeData = "true";
 						}
 						
 					} else {
-						System.out.println("!!**^^**  Error: FileName=" + paramMap.get("filename"));
+						//System.out.println("!!**^^**  Error: FileName=" + paramMap.get("filename"));
 						
 					}
 					//System. out.println("!!**^^**  FN=" + paramMap.get("filename"));
@@ -719,6 +758,8 @@ public class NbvaCodeDisp extends HttpServlet {
 				String formUrl = "formUrl";
 				String formUrlValue = "/nbvacode/nbvacodeexcel";
 				request.getSession().setAttribute(formUrl, formUrlValue);
+				String formUrlDispValue = "/nbvacode/nbvadispfile";
+				request.getSession().setAttribute(formUrl, formUrlDispValue);
 				String sep = ";";
 				//String termPlusSpan = "";
 				int mthSpan = 9;
@@ -737,7 +778,7 @@ public class NbvaCodeDisp extends HttpServlet {
 					 //Olyutil.printStrArray(strArr);
 					kitArr = GetKitData.getKitData(kitFileName);
 					// Olyutil.printStrArray(kitArr);
-					rtnPair = parseData(strArr, arrSZ, effDate );
+					rtnPair = parseData(strArr, arrSZ, effDate, codeMapRtn );
 					contractData = rtnPair.get(0).getLeft();
 					rtnArrSZ = rtnPair.get(0).getRight().size(); 
 					// System.out.println("*** RTN Arr SZ=" + rtnArrSZ + "--");
@@ -820,7 +861,7 @@ public class NbvaCodeDisp extends HttpServlet {
 			String tag = "csvData: ";
 			DecimalFormat format = new DecimalFormat("0.00");
 			String paramName = "id";
-			String paramValue = request.getParameter(paramName);
+			String paramValue = request.getParameter(paramName).trim();
 
 			String roParamName = "rotype";
 			String roParamValue = request.getParameter(roParamName);
@@ -870,7 +911,7 @@ public class NbvaCodeDisp extends HttpServlet {
 				 //Olyutil.printStrArray(strArr);
 				kitArr = GetKitData.getKitData(kitFileName);
 				// Olyutil.printStrArray(kitArr);
-				rtnPair = parseData(strArr, arrSZ, effDate );
+				//rtnPair = parseData(strArr, arrSZ, effDate );
 				contractData = rtnPair.get(0).getLeft();
 				rtnArrSZ = rtnPair.get(0).getRight().size(); 
 				// System.out.println("*** RTN Arr SZ=" + rtnArrSZ + "--");
