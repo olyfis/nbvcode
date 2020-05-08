@@ -424,7 +424,7 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 		
 		long id = rtnPair.get(0).getRight().get(0).getAssetId();
 		int d = rtnPair.get(0).getRight().get(0).getDispCode();
-		System.out.println("*** Asset=" + id + "-- DCODE=" + d  + "--");
+		//System.out.println("*** Asset=" + id + "-- DCODE=" + d  + "--");
 		
 		
 		for (int i = 0; i < listArrSZ; i++ ) {
@@ -456,14 +456,21 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 				model = asset.getModel();
 				//System.out.println("*** AssetReturn: Model ->" + model + "--");
 				
-				System.out.println("***^^^^^ Asset DispCode=" +asset.getDispCode() + "--");
+				//System.out.println("***^^^^^ Asset DispCode=" +asset.getDispCode() + "--");
 				
 				
 				rowColor = (j % 2 == 0) ? rowEven : rowOdd;
 				cells +="<tr bgcolor=" + rowColor + ">";
 				cells +="<TD>" + asset.getAssetId() + "</td> ";
 				//cells +="<TD>" + asset.getDispCode() + "</td> ";
-				cells +="<TD>" + Integer.toString(asset.getDispCode()) + "</td> ";
+				
+				if (asset.getDispCode() == -9) {
+					cells +="<TD>null</td> ";
+				} else {
+					cells +="<TD>" + Integer.toString(asset.getDispCode()) + "</td> ";
+				}
+				
+				 
 				
 				
 				cells +="<TD>" + asset.getEquipType() + "</td> ";

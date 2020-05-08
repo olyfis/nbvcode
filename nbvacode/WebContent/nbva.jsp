@@ -209,13 +209,14 @@ function ajaxFunction(){
   </tr>
   -->
   <!-- ********************************************************************************************************************************************************* -->
-     
-     <tr>
-  <td width="20" valign="bottom"> <b>Enter Invoice Number:</b> </td> 
-  <td width="20" valign="bottom">  
-      <CENTER>  <input name="invoice" type="text"   /> </CENTER>
-  </td>
-  </tr>
+		    <!--   
+		     <tr>
+		  <td width="20" valign="bottom"> <b>Enter Invoice Number:</b> </td> 
+		  <td width="20" valign="bottom">  
+		      <CENTER>  <input name="invoice" type="text"   /> </CENTER>
+		  </td>
+		  </tr>
+		  --> 
       <!-- ********************************************************************************************************************************************************* -->
      
       <tr>

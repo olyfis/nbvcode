@@ -511,10 +511,10 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 					
 					 cells +="<TD> 	<select  name=\"dispCodeArr_"   + Long.toString(asset.getAssetId() )  + "\"  > "; 
 					  n++;
-					  System.out.println("*!!!!!!!!! AID=" +  aID + "-- Asset=" + asset.getAssetId()  + "-- DC=" +dCode +"--");		
+					  //System.out.println("*!!!!!!!!! AID=" +  aID + "-- Asset=" + asset.getAssetId()  + "-- DC=" +dCode +"--");		
 					  if (code.equals("null")) {
 						  
-						  dCode = "-8" ;
+						  dCode = "-9" ;
 					  }  
 					//cells +="<option value=\"" + asset.getDispCode() + "\" selected    > " +code+    " </option>  ";
 				cells +="<option value=\"" + dCode + "\" selected    > " +code+    " </option>  ";				

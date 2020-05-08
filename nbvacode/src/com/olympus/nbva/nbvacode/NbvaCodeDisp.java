@@ -194,8 +194,7 @@ public class NbvaCodeDisp extends HttpServlet {
 			
 		} else {
 
-			System.out.println("***^^ LOAD Else^^^^*** DispCode=" + asset.getDispCode() + "-- Orig=" + line[22] + "-- Asset="
-					+ asset.getAssetId() + "--");
+			//System.out.println("***^^ LOAD Else^^^^*** DispCode=" + asset.getDispCode() + "-- Orig=" + line[22] + "-- Asset=" + asset.getAssetId() + "--");
 			if (Olyutil.isNullStr(line[22]) || line[22].equals("null")) {
 				asset.setDispCode(-9);
 				// System.out.println("***^^^^^^*** Set DispCode=" + asset.getDispCode() + "--

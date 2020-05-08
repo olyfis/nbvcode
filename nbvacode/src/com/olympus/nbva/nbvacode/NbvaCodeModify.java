@@ -63,8 +63,13 @@ public class NbvaCodeModify extends HttpServlet {
 			long assetId = dataObj.get(0).getRight().get(k).getAssetId();
 			String dispParamTag = dispParam + Long.toString(assetId);
 			String dispCodeVal = request.getParameter(dispParamTag);
-			dataObj.get(0).getRight().get(k).setDispCode(Olyutil.strToInt(dispCodeVal));
+			int dCode = Olyutil.strToInt(dispCodeVal);
 			
+			if (Olyutil.isNullStr(dispCodeVal)) {
+				dataObj.get(0).getRight().get(k).setDispCode(-9);
+			} else {
+				dataObj.get(0).getRight().get(k).setDispCode(Olyutil.strToInt(dispCodeVal));
+			}
 			 //System.out.println("*** AssetID=" + assetId + "-- Tag=" + dispParamTag + "-- Value=" + dispCodeVal);
 			
 		}
@@ -86,7 +91,7 @@ public class NbvaCodeModify extends HttpServlet {
 		//String dispCoveVals = request.getParameter("dispCodeArr_0");
 		 
 		
-		// setAssetObj(list, request);
+		setAssetObj(list, request);
 		 request.getRequestDispatcher(dispatchJSP).forward(request, response);
 			
 		
