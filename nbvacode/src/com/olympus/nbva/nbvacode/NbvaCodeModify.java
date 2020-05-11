@@ -47,54 +47,54 @@ import org.apache.poi.ss.formula.functions.FinanceLib;
 @WebServlet("/nbvamod")
 public class NbvaCodeModify extends HttpServlet {
 	/****************************************************************************************************************************************************/
-	public static void setAssetObj(List<Pair<ContractData, List<AssetData> >> dataObj, HttpServletRequest request ) {
+	public static void setAssetObj(List<Pair<ContractData, List<AssetData>>> dataObj, HttpServletRequest request) {
 		List<AssetData> assets = new ArrayList<AssetData>();
 		int rArrSZ = dataObj.get(0).getRight().size();
-		 //System.out.println("*** rArrSZ=" + rArrSZ + "--");
+		// System.out.println("*** rArrSZ=" + rArrSZ + "--");
 		String dispParam = "dispCodeArr_";
 		assets = dataObj.get(0).getRight();
-		
-		String num = request.getParameter("num");
-		//System.out.println("*** Num=" + num + "-- SuB=" + request.getParameter("dispCode2"));
-		
-		
-		 
-		for (int k = 0; k < rArrSZ; k++) {	
+
+		// String num = request.getParameter("num");
+		// System.out.println("*** Num=" + num + "-- SuB=" +
+		// request.getParameter("dispCode2"));
+
+		for (int k = 0; k < rArrSZ; k++) {
 			long assetId = dataObj.get(0).getRight().get(k).getAssetId();
 			String dispParamTag = dispParam + Long.toString(assetId);
 			String dispCodeVal = request.getParameter(dispParamTag);
 			int dCode = Olyutil.strToInt(dispCodeVal);
-			
+			//System.out.println("*** Before -> AssetID=" + assetId + "-- Tag=" + dispParamTag + "-- Value=" + dispCodeVal
+					//+ "-- dCode=" + dCode + "--objvAL=" + dataObj.get(0).getRight().get(k).getDispCode() + "--");
+
 			if (Olyutil.isNullStr(dispCodeVal)) {
 				dataObj.get(0).getRight().get(k).setDispCode(-9);
 			} else {
 				dataObj.get(0).getRight().get(k).setDispCode(Olyutil.strToInt(dispCodeVal));
 			}
-			 //System.out.println("*** AssetID=" + assetId + "-- Tag=" + dispParamTag + "-- Value=" + dispCodeVal);
-			
+			//System.out.println("***After ->  AssetID=" + assetId + "-- Tag=" + dispParamTag + "-- Value=" + dispCodeVal
+					//+ "-- dCode=" + dCode + "--objvAL=" + dataObj.get(0).getRight().get(k).getDispCode() + "--");
+
 		}
-		 
+
 	}
-	
 	
 	/****************************************************************************************************************************************************/
 	
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 //doGet(  request,   response);	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// doGet( request, response);
 		String dispatchJSP = "/nbvadetail_code_result.jsp";
 		HttpSession session = request.getSession(true);
-		List<Pair<ContractData, List<AssetData>>> list = (List<Pair<ContractData, List<AssetData>>>) session.getAttribute("rtnPairList");
-		
-		 
-		//String s1 = (String) session.getAttribute("JB");
-		//String dispCoveVals = request.getParameter("dispCodeArr_0");
-		 
-		
+		List<Pair<ContractData, List<AssetData>>> list = (List<Pair<ContractData, List<AssetData>>>) session
+				.getAttribute("rtnPairList");
+
+		// String s1 = (String) session.getAttribute("JB");
+		// String dispCoveVals = request.getParameter("dispCodeArr_0");
+
 		setAssetObj(list, request);
-		 request.getRequestDispatcher(dispatchJSP).forward(request, response);
-			
-		
+		request.getRequestDispatcher(dispatchJSP).forward(request, response);
+
 	} // End doGet()
 
 	/****************************************************************************************************************************************************/

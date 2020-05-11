@@ -31,10 +31,23 @@ package com.olympus.nbva.contracts;
 	private double rtnTotal;
 	private double buyTotal;
 	private String Invoice;
+	private String nextAgingDate;
 	/****************************************************************************************************************************************************/
 
+	
+	
+	
+	
+	
+	
 	public String getInvoice() {
 		return Invoice;
+	}
+	public String getNextAgingDate() {
+		return nextAgingDate;
+	}
+	public void setNextAgingDate(String nextAgingDate) {
+		this.nextAgingDate = nextAgingDate;
 	}
 	public void setInvoice(String invoice) {
 		Invoice = invoice;

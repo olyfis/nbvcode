@@ -293,6 +293,10 @@ public void  buildCellsContract( JspWriter out, ContractData contract, String fo
 	out.println("<th class=\" " + style + "  \" >Term Plus Nine Date</th>");
 	out.println( "<td class=\"a\">" + contract.getTermPlusSpan() + "</td></tr>");
 	
+	out.println("<tr>");
+	out.println("<th class=\" " + style + "  \" >Next Aging Date</th>");
+	out.println( "<td class=\"a\">" + contract.getNextAgingDate() + "</td></tr>");
+	
 	
 	out.println("<tr>");
 	out.println("<th class=\" " + style + "  \" >Term</th>");
@@ -463,14 +467,26 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 				cells +="<tr bgcolor=" + rowColor + ">";
 				cells +="<TD>" + asset.getAssetId() + "</td> ";
 				//cells +="<TD>" + asset.getDispCode() + "</td> ";
-				
-				if (asset.getDispCode() == -9) {
-					cells +="<TD>null</td> ";
+				String code = "";
+				if (asset.getDispCode() == 0) {
+					code = "Rollover";
+				} else if (asset.getDispCode() == 1 ) { 
+					code = "Buyout";
+				} else if (asset.getDispCode() == 2 ) { 
+					code = "Return";
+				} else if (asset.getDispCode() == -9) {
+					code = "Null";
 				} else {
-					cells +="<TD>" + Integer.toString(asset.getDispCode()) + "</td> ";
+					code = "Misc" + "("    + asset.getDispCode() +  ")";
+					
 				}
 				
-				 
+				cells +="<TD>" +  code+ "</td> ";
+
+				
+				
+				
+				
 				
 				
 				cells +="<TD>" + asset.getEquipType() + "</td> ";

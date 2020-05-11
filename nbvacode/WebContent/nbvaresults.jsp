@@ -23,16 +23,18 @@
 
 	//out.println("atype=" + at);
 	//System.out.println("***^^^*** AT=" + at + "--");
+	//String hostname2 = "cvyhj3a27";
+	String hostname2 = "localhost";
 	if (at != null) {
 
 		if (at.equals("100")) {
-			String hostname2 = "cvyhj3a27";
+			
 			String redirectURL = "http://" + hostname2  + ":8181/nbvacode/nbvagetasset.jsp";
 			response.sendRedirect(redirectURL);
 
 		} else if (at.equals("125")) {
 		
-			String hostname2 = "cvyhj3a27";
+			 
 			String redirectURL = "http://" + hostname2  + ":8181/nbvacode/nbva.jsp";
 			response.sendRedirect(redirectURL);
 		
@@ -41,7 +43,7 @@
 		
 	} else if (at.equals("150")) {
 		
-		String hostname2 = "cvyhj3a27";
+	 
 		String redirectURL = "http://" + hostname2  + ":8181/nbvacode/createdispfile.jsp";
 		response.sendRedirect(redirectURL);
 		
@@ -49,13 +51,13 @@
 		
 		
 	} else if (at.equals("425")) {
-			String hostname2 = "cvyhj3a27";
+		 
 			String id = request.getParameter("id");
 			//out.println("ID:" + id + "--");
 			String redirectURL = "http://" + hostname2  + ":8181/nbvacode/nbva?id=" + id;
 			response.sendRedirect(redirectURL);
 		} else if (at.equals("150")) {
-			String hostname2 = "cvyhj3a27";
+		 
 			String redirectURL = "http://" + hostname2  + ":8181/nbvacode/nbvagetasset.jsp";
 			response.sendRedirect(redirectURL);
 		

@@ -238,7 +238,8 @@ public class NbvaCodeDisp extends HttpServlet {
 			contract.setCustomerCity(strSplitArr[16]); 
 			contract.setCustomerState(strSplitArr[17]);
 			contract.setCustomerZip(strSplitArr[18]); 
-			 
+			contract.setNextAgingDate(strSplitArr[27]);
+			 //System.out.println("*** ContractData: 27" + strSplitArr[27] );
 			
 			//System.out.println("*** ContractData:" + strSplitArr.toString() );
 			return(contract);
@@ -254,11 +255,13 @@ public class NbvaCodeDisp extends HttpServlet {
 			int i = 0;
 			 //System.out.println("*** SZ=" + sz );
 			for (i = 0; i < sz; i++) {
-				//System.out.println("*** Data:" + strArr.get(i) );
+				 //System.out.println("*** Data:" + strArr.get(i) );
 				strSplitArr = Olyutil.splitStr(strArr.get(i), ";");
 				purchOption = strSplitArr[26];	
 				//System.out.println("*********** i=" + i + "-- Disp=" + strSplitArr[22] +    "-- Value=" + strSplitArr[i] );  
 				if (i == 0) { // get Contract data
+					
+					//System.out.println("*********** i=" + i + "-- Line=" + strArr.get(i) + "--"); 
 					contract = loadContractObj(strSplitArr, effDate);
 					
 						asset = loadAssetObj(strSplitArr, codeMap);
@@ -685,11 +688,30 @@ public class NbvaCodeDisp extends HttpServlet {
 			return(codeMap);
 		}
 		/****************************************************************************************************************************************************/
+		public static HashMap<String, Integer>  getCodesSQL(List<Pair<ContractData, List<AssetData>>> rtnPair) {
+			HashMap<String, Integer> cMap = new HashMap<String, Integer>();
+			int rtnArrSZ = rtnPair.get(0).getRight().size(); 
+			 
+			if (rtnArrSZ > 0) {
+				//System.out.println("*** Asset=" + id + "-- DCODE=" + d  + "--sz=" + sz);	
+				for (int k = 0; k < rtnArrSZ; k++) {	
+					long assetId = rtnPair.get(0).getRight().get(k).getAssetId();
+					int d = rtnPair.get(0).getRight().get(k).getDispCode();
+					System.out.println("*** k=" +  k + "-- AssetID=" + assetId + "-- DispCode=" + d + "--");
+					cMap.put(Long.toString(assetId), d);				
+				}	
+			} else {
+				cMap = null;
+			}
+			return(cMap);
+		}
+		/****************************************************************************************************************************************************/
 
 		@Override
 		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			HashMap<String, String> paramMap = new HashMap<String, String>();
 			HashMap<String, String> codeMapRtn = new HashMap<String, String>();
+			HashMap<String, Integer> codeMapSQL = new HashMap<String, Integer>();
 			HashMap<String, ArrayList<Integer>> sqlErrMap = new HashMap<String, ArrayList<Integer>>();
 			ArrayList<Integer> errIDArrayRtn = new ArrayList<>();
 			ArrayList<String> ageArr = new ArrayList<String>();
@@ -769,8 +791,11 @@ public class NbvaCodeDisp extends HttpServlet {
 				
 				ageArr = Olyutil.readInputFile(ageFile);
 				// Olyutil.printStrArray(ageArr);
-
+				// get data from DB
 				strArr = getDbData(idVal, sqlFile, "", "Asset");
+				
+				
+				
 				arrSZ = strArr.size();
 				  //System.out.println("*** arrSz:" + arrSZ + "--");
 				if (arrSZ > 0) {
@@ -780,7 +805,10 @@ public class NbvaCodeDisp extends HttpServlet {
 					rtnPair = parseData(strArr, arrSZ, effDate, codeMapRtn );
 					contractData = rtnPair.get(0).getLeft();
 					rtnArrSZ = rtnPair.get(0).getRight().size(); 
-					// System.out.println("*** RTN Arr SZ=" + rtnArrSZ + "--");
+					 System.out.println("*** RTN Arr SZ=" + rtnArrSZ + "--");
+					 
+					 
+					// codeMapSQL = getCodesSQL(rtnPair);
 					// System.out.println("*** ContractReturn: ID=" + contractData.getContractID() +
 					// "--");
 					// System.out.println("*** ContractReturn: EquipCost=" +
@@ -807,6 +835,8 @@ public class NbvaCodeDisp extends HttpServlet {
 					request.getSession().setAttribute("termPlusSpan", termPlusSpan);
 					request.getSession().setAttribute("codeMapRtn", codeMapRtn);
 					request.getSession().setAttribute("useCodeData", useCodeData);
+					//request.getSession().setAttribute("codeMapSQL", codeMapSQL);
+					
 					String opt = "";
 					if (errIDArrayRtn.size() > 0) {
 						sqlErrMap.put(idVal, errIDArrayRtn);
