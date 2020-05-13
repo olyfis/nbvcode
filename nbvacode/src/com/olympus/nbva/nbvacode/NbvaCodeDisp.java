@@ -706,9 +706,45 @@ public class NbvaCodeDisp extends HttpServlet {
 			return(cMap);
 		}
 		/****************************************************************************************************************************************************/
+		public static HashMap<String, String>  getReturnStat(String statFile) {
+			HashMap<String, String> rMap = new HashMap<String, String>();
+			ArrayList<String> strArr = new ArrayList<String>();
+			String key = "";
+			String rVal = "";
+			strArr = Olyutil.readInputFile(statFile);
+			if (strArr.size() >0) {
+				for (String str : strArr) {
+					String[] items = str.split(",");
+					key = items[0];
+					rVal= items[1];
+					
+					rMap.put(key, rVal);
+				}
+			} else {
+				rMap = null;
+			}
+			
+	    
+			return(rMap);
+		}
+		/****************************************************************************************************************************************************/
+		/****************************************************************************************************************************************************/
+		public static boolean displayHashMap(HashMap<String, String> hashMap) {
+			boolean status = true;
+			
+			Set<String> keys = hashMap.keySet();  //get all keys
+			for(String key: keys) {
+	
+			  System.out.println("**----** Key=" + key + "-- Value=" + hashMap.get(key) + "--");
+			}
+			return(status);
+			
+		}
+		/****************************************************************************************************************************************************/
 
 		@Override
 		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			HashMap<String, String> returnMap = new HashMap<String, String>();
 			HashMap<String, String> paramMap = new HashMap<String, String>();
 			HashMap<String, String> codeMapRtn = new HashMap<String, String>();
 			HashMap<String, Integer> codeMapSQL = new HashMap<String, Integer>();
@@ -731,6 +767,8 @@ public class NbvaCodeDisp extends HttpServlet {
 			String dispatchJSP_Error = "/nbvaerror.jsp";
 			//String ageFile = "Y:\\GROUPS\\Global\\BI Reporting\\Finance\\FIS_Bobj\\unappsuspense\\dailyAge.csv";
 			String ageFile = "C:\\Java_Dev\\props\\nbvaupdate\\dailyAge.csv";
+			String rtnFile = "C:\\Java_Dev\\props\\nbvaupdate\\returnStat.csv";
+			
 			String tag = "csvData: ";
 			DecimalFormat format = new DecimalFormat("0.00");
 			Date bd = Olyutil.getCurrentDate();
@@ -779,7 +817,9 @@ public class NbvaCodeDisp extends HttpServlet {
 				String formUrl = "formUrl";
 				String formUrlValue = "/nbvacode/nbvacodeexcel";
 				request.getSession().setAttribute(formUrl, formUrlValue);
-				String formUrlDispValue = "/nbvacode/nbvadispfile";
+				//String formUrlDispValue = "/nbvacode/nbvadispfile"; // remove
+				
+				String formUrlDispValue = "/nbvacode/nbvacodeexcel";
 				request.getSession().setAttribute(formUrl, formUrlDispValue);
 				String sep = ";";
 				//String termPlusSpan = "";
@@ -790,6 +830,10 @@ public class NbvaCodeDisp extends HttpServlet {
 				//int mthRem = 0;
 				
 				ageArr = Olyutil.readInputFile(ageFile);
+				returnMap = getReturnStat(rtnFile);
+				//displayHashMap(returnMap);
+			 
+				
 				// Olyutil.printStrArray(ageArr);
 				// get data from DB
 				strArr = getDbData(idVal, sqlFile, "", "Asset");
@@ -835,7 +879,9 @@ public class NbvaCodeDisp extends HttpServlet {
 					request.getSession().setAttribute("termPlusSpan", termPlusSpan);
 					request.getSession().setAttribute("codeMapRtn", codeMapRtn);
 					request.getSession().setAttribute("useCodeData", useCodeData);
-					//request.getSession().setAttribute("codeMapSQL", codeMapSQL);
+					
+					
+					 request.getSession().setAttribute("returnMap", returnMap);
 					
 					String opt = "";
 					if (errIDArrayRtn.size() > 0) {
@@ -873,6 +919,9 @@ public class NbvaCodeDisp extends HttpServlet {
 		@Override
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			HashMap<String, ArrayList<Integer>> sqlErrMap = new HashMap<String, ArrayList<Integer>>();
+			
+			
+			
 			ArrayList<Integer> errIDArrayRtn = new ArrayList<>();
 			ArrayList<String> ageArr = new ArrayList<String>();
 			double sumTotal = 0.0;

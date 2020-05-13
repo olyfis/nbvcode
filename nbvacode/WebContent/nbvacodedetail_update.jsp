@@ -17,7 +17,9 @@
 	ArrayList<String> tokens = new ArrayList<String>();
 	ArrayList<String> kitArr = new ArrayList<String>();
 	String formUrl =  (String) session.getAttribute("formUrl");
-	String formUrlDisp =  (String) session.getAttribute("formUrlDisp");
+	String formUrlDisp =  (String) session.getAttribute("formUrl");
+	
+	//String formUrlDisp =  (String) session.getAttribute("formUrlDisp"); // Remove if not req
 	double sumTotal = (double) session.getAttribute("sumTotal");
  	String kitFileName = "C:\\Java_Dev\\props\\kitdata\\kitdata.csv";
 	HashMap<String, String> map = new HashMap<String, String>();
@@ -26,8 +28,14 @@
 	//DecimalFormat df = new DecimalFormat("$###,##0.00");
 	String opt =  (String) session.getAttribute("opt");
 	HashMap<String, String> codeMap = new HashMap<String, String>();
+	HashMap<String, String> rtnAssetMap = new HashMap<String, String>();
+	
 	codeMap = (HashMap<String, String> )session.getAttribute("codeMapRtn");
+	rtnAssetMap = (HashMap<String, String> )session.getAttribute("returnMap");
 	String useCodeData = (String) session.getAttribute("useCodeData");
+	
+	
+	
 	/*
 	Set<String> keys = codeMap.keySet();  //get all keys
 	for(String key: keys) {	
@@ -411,7 +419,7 @@ public HashMap<String, String> getTotals(List<AssetData> assetList) {
 	
 	
 /*************************************************************************************************************************************************************/
-public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List<Pair<ContractData, List<AssetData> >> rtnPair, String opt, String dispFlag,  HashMap<String, String> cMap  ) throws IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List<Pair<ContractData, List<AssetData> >> rtnPair, String opt, String dispFlag,  HashMap<String, String> cMap,  HashMap<String, String> rMap ) throws IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 	HashMap<String, String> rtnMap = new HashMap<String, String>();
 	DecimalFormat df = new DecimalFormat("$###,##0.00");
 	String cells = "";
@@ -424,6 +432,9 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 	String rowColor = null;
 	String model = "";
 	String[] dispArr = null;
+	
+	String equipDesc = "";
+	String modelRtn = "N/A";
 	int n = 0;
 	//String formUrlValue = "/nbvadetail_flex.jsp" ;
 	String formUrlValue = "/nbvadetail_update.jsp" ;
@@ -436,7 +447,7 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 		assetList	= rtnPair.get(0).getRight();		 
 				 
 		rtnMap = getTotals( assetList);
-				
+		Set<String> keys = rMap.keySet();		
 		for (int i = 0; i < listArrSZ; i++ ) {
 			//int rtnArrSZ = rtnPair.get(i).getRight().size();
 			//List<AssetData> assetList = new ArrayList<AssetData>();
@@ -450,7 +461,7 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 			cells +="<TD>" + rtnMap.get("resTotal") + "</td>";
 			
 			cells +="<TD>" + rtnMap.get("rentalTotal") + "</td>";
-			//cells +="<TD >" + "" + "</td>";
+			cells +="<TD >" + "" + "</td>";
 			cells +="  </tr>";
 				
 			String dCode = "";
@@ -528,10 +539,24 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 					cells += "<option value=\"2\">Return</option>  ";
 					cells += " </select> </td> ";
 					//}
-
+					equipDesc = asset.getEquipDesc();
 					cells += "<TD>" + asset.getEquipType() + "</td> ";
-					cells += "<TD>" + asset.getEquipDesc() + "</td> ";
-
+					//cells += "<TD>" + asset.getEquipDesc() + "</td> ";
+					cells += "<TD>" + equipDesc + "</td> ";
+					
+					
+					
+					
+					//System.out.println("*** CHECK:" + model + "-- rMAP=" + rMap.get(model) + "--");
+					
+					//if (model.equals(rMap.get(model))) {
+					if (keys.contains(model)) {
+						modelRtn = rMap.get(model);
+						//System.out.println("*** FOUND:" + model + "-- Value="  + rMap.get(model) + "--");		
+					} else {
+						modelRtn = "N/A";
+					}
+					asset.setReturnAsset(modelRtn);
 					cells += "<TD>" + asset.getModel() + "</td> ";
 
 					cells += "<TD>" + asset.getSerNum().replaceAll("null", "") + "</td> ";
@@ -550,6 +575,9 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 
 					String rentalAmt_df = Olyutil.decimalfmt(asset.getaRentalAmt(), "$###,##0.00");
 					cells += "<TD>" + rentalAmt_df + "</td>  ";
+					
+					cells += "<TD>" + modelRtn+ "</td>  ";
+					
 
 				}
 			}
@@ -689,7 +717,7 @@ out.println("</form> </td></tr></table>");
 		out.println(header2);
 		out.println("</tr></thead>");
 		out.println("<tbody id=\"report\">");
-		out.println(buildCellsAsset(map, out, list, opt, useCodeData, codeMap)); // build data cells from file
+		out.println(buildCellsAsset(map, out, list, opt, useCodeData, codeMap, rtnAssetMap)); // build data cells from file
 		
 		out.println("</tbody></table><BR>"); // Close Table
 	

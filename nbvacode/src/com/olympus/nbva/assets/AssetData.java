@@ -23,6 +23,7 @@ public class AssetData {
 	private double rollPrice;
 	private double buyPrice;
 	private double rtnPrice;
+	private String returnAsset;
 	
 
 
@@ -36,6 +37,22 @@ public class AssetData {
 	
 	public String getCalcOpt() {
 		return calcOpt;
+	}
+
+
+
+
+
+	public String getReturnAsset() {
+		return returnAsset;
+	}
+
+
+
+
+
+	public void setReturnAsset(String returnAsset) {
+		this.returnAsset = returnAsset;
 	}
 
 

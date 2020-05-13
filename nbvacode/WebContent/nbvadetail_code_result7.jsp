@@ -165,36 +165,19 @@ public HashMap<String, String> getCalcTotals(List<AssetData> assetList) {
 	double buyTotal = 0.00;
 	double rollTotal = 0.00;
 	double retTotal = 0.00;
-	double residualTotal = 0.00;
 	for (int j = 0; j < rtnArrSZ; j++ ) {
 		AssetData asset = new AssetData();
 		asset = assetList.get(j);
 		 buyTotal +=  asset.getBuyPrice();
 		 rollTotal += asset.getRollPrice();
 		retTotal += asset.getRtnPrice();
-		residualTotal += asset.getResidAmt();
 	}	
-	/*
 	String resTotal_df = Olyutil.decimalfmt(buyTotal, "$###,##0.00");
 	String equipTotal_df = Olyutil.decimalfmt(rollTotal, "$###,##0.00");
 	String rentalTotal_df = Olyutil.decimalfmt(retTotal, "$###,##0.00");
-	
-	
-	
 	map.put("buyTotal", resTotal_df);
 	map.put("rollTotal", equipTotal_df);
-	*/
-	
-	String rollTotal_df = Olyutil.decimalfmt(rollTotal, "$###,##0.00");
-	String buyoutTotal_df = Olyutil.decimalfmt(buyTotal, "$###,##0.00");
-	String rentalTotal_df = Olyutil.decimalfmt(retTotal, "$###,##0.00");
-	String residualTotal_df = Olyutil.decimalfmt(retTotal, "$###,##0.00");
-	
 	map.put("rtnTotal", rentalTotal_df);
-	map.put("rollTotal", rollTotal_df);
-	map.put("buyTotal", buyoutTotal_df);
-	map.put("residualTotal", residualTotal_df);
-	
 	//System.out.println("*** ResTotal=" + resTotal_df + "-- EquipTotal=" + equipTotal_df + "-- RentalAmt=" + rentalTotal_df);
 	return (map);
 }
@@ -395,28 +378,21 @@ public HashMap<String, String> getTotals(List<AssetData> assetList) {
 	double resTotal = 0.00;
 	double equipTotal = 0.00;
 	double rentalTotal = 0.00;
-	double residualTotal = 0.00;
 	for (int j = 0; j < rtnArrSZ; j++ ) {
 		AssetData asset = new AssetData();
 		asset = assetList.get(j);
 		 resTotal += asset.getResidAmt();
 		 equipTotal += asset.getEquipCost();
 		 rentalTotal += asset.getaRentalAmt();
-		 residualTotal += asset.getResidAmt();
-		 
 	}	
 	String resTotal_df = Olyutil.decimalfmt(resTotal, "$###,##0.00");
 	String equipTotal_df = Olyutil.decimalfmt(equipTotal, "$###,##0.00");
 	String rentalTotal_df = Olyutil.decimalfmt(rentalTotal, "$###,##0.00");
-	String residualTotal_df = Olyutil.decimalfmt(residualTotal, "$###,##0.00");
-	
 	
 	map.put("resTotal", resTotal_df);
 
 	map.put("equipTotal", equipTotal_df);
 	map.put("rentalTotal", rentalTotal_df);
-	map.put("residualTotal", residualTotal_df);
-	
 	//System.out.println("*** ResTotal=" + resTotal_df + "-- EquipTotal=" + equipTotal_df + "-- RentalAmt=" + rentalTotal_df);
 	return (map);
 }
@@ -465,7 +441,7 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 			cells +="<TD>" + "Totals" + "</td>";
 			cells +="<TD colspan=\"10\">" + "" + "</td>";
 			cells +="<TD>" + rtnMap.get("equipTotal") + "</td>";
-			cells +="<TD>" + rtnMap.get("residualTotal") + "</td>";
+			cells +="<TD>" + rtnMap.get("resTotal") + "</td>";
 			
 			cells +="<TD>" + rtnMap.get("rentalTotal") + "</td>";
 			cells +="<TD>" + rtnMap2.get("buyTotal") + "</td>";
@@ -542,17 +518,17 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 				cells +="<TD>" + asset.getEquipCity() + "</td> ";
 				cells +="<TD>" + asset.getEquipState() + "</td> ";
 				cells +="<TD>" + asset.getEquipZip() + "</td>  ";
-				String equipCost_df = Olyutil.decimalfmt(asset.getEquipCost(), "$###,##0.00");
-				
-				
-				cells +="<TD>" + equipCost_df  + "</td>  ";
+		
 				
 				String residAmt_df = Olyutil.decimalfmt(asset.getResidAmt(), "$###,##0.00");
 				//System.out.println("*** ResidualAmt=" + asset.getResidAmt()   + "FMT:" + residAmt_df );
 				cells +="<TD>" + residAmt_df + "</td>  ";
 				
 		 
-			
+				String equipCost_df = Olyutil.decimalfmt(asset.getEquipCost(), "$###,##0.00");
+				
+				
+				cells +="<TD>" + equipCost_df  + "</td>  ";
 	 
 				String rentalAmt_df  = Olyutil.decimalfmt(asset.getaRentalAmt(), "$###,##0.00");
 				cells +="<TD>" + rentalAmt_df+ "</td>  ";
