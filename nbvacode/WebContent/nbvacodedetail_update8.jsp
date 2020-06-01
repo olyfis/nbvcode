@@ -7,7 +7,6 @@
 <%@ page import="java.text.*"%>
 <%@ page import="com.olympus.nbva.assets.AssetData"%>
 <%@ page import="com.olympus.nbva.contracts.ContractData"%>
-
 <%@ page import="org.apache.commons.lang3.tuple.*"%>
 <%@ page import="com.olympus.olyutil.*"%>
 <%@ page import="com.olympus.nbva.DateUtil"%>
@@ -36,9 +35,7 @@
 	rtnAssetMap = (HashMap<String, String> )session.getAttribute("returnMap");
 	String useCodeData = (String) session.getAttribute("useCodeData");
 	
-	//HashMap<String, CalcTableData> calcTableMap = new HashMap<String, CalcTableData>();
-	//calcTableMap = (HashMap<String, CalcTableData> )session.getAttribute("CalcTableData");
-	//System.out.println("*** Buy - 24plus (5):" +  calcTableMap.get("5").getRoll24plus() + "--");
+	
 	
 	/*
 	Set<String> keys = codeMap.keySet();  //get all keys
@@ -307,11 +304,6 @@ public void  buildCellsContract( JspWriter out, ContractData contract, String fo
 	out.println("<tr>");
 	out.println("<th class=\" " + style + "  \" >Months Remaining</th>");
 	out.println( "<td class=\"a\">" + mthRem  + "</td></tr>");
-	
-	out.println("<tr>");
-	out.println("<th class=\" " + style + "  \" >Aging Months Difference</th>");
-	out.println( "<td class=\"a\">" + contract.getMonthsDiff() + "</td></tr>");
-	
 	
 	//double equipPayment = contract.getEquipPayment();
 	//String equipPayment_df = df.format(equipPayment);
@@ -734,7 +726,7 @@ out.println("</form> </td></tr></table>");
 
 	}
 	 
-
+	
 
 %>
 

@@ -18,8 +18,6 @@
 	String commDate = (String) session.getAttribute("commDate");
 	String termDate = (String) session.getAttribute("termDate");
 	String effDate = (String) session.getAttribute("effDate");
-	String naDate = (String) session.getAttribute("naDate");
-	
 	ArrayList<Integer> eMap = new ArrayList<>();
 	String idVal = (String) session.getAttribute("idVal");
 	
@@ -173,34 +171,27 @@ if (errMap != null ) {
 	 
 			int k = 0;
 			int sz = eMap.size();
-			//out.println("<h5>eMapSZ=" + sz +  "  -- EM="  + eMap.get(0)  +  "</h5>");
+			//out.println("<h5>eMapSZ=" + sz +  "  -- EM="  + eMap.get(0)  +  "</h5>)");
 			 
 			 
 			for (k = 0; k < sz; k++) {
-				
-				 //System.out.println("**^^** Err=" + eMap.get(k) + "--");
 			 	if (eMap.get(k) == -1) {
-			 		out.println("<h5> (Error:" + eMap.get(k) +  " -- ID=" +  idVal   + ") The Effective date (<B>" +  effDate +   "</B>) occurs before the Commencement date (<B>" + commDate   + "</B>).</h5><BR>");
+			 		out.println("<h5>The Effective date (<B>" +  effDate +   "</B>) occurs before the Commencement date (<B>" + commDate   + "</B>).</h5><BR>");
 			 	}
 				if (eMap.get(k) == -2) {
-					out.println("<h5>(Error:" + eMap.get(k) +  "  -- ID=" +  idVal   + ") The day component (</B>yyyy-mm-<b>dd</b>) of the Effective date (<B>" +  effDate +   "</B>) does not match the Commencement date (<B>" + commDate   + ").</h5><BR>");
+					out.println("<h5>The day component (</B>yyyy-mm-<b>dd</b>) of the Effective date (<B>" +  effDate +   "</B>) does not match the Commencement date (<B>" + commDate   + ").</h5><BR>");
 			 	}
 			 	
 				if (eMap.get(k) == -5) {
-					out.println("<h5>(Error:" + eMap.get(k) +  " -- ID=" +  idVal   + ") The contract cannot have an Invoice Code set to \"<B>N</B>\" </h5><BR>");
+					out.println("<h5> The contract cannot have an Invoice Code set to \"<B>N</B>\" </h5><BR>");
 				}
 				
 				if (eMap.get(k) == -10) {
-					out.println("<h5>(Error:" + eMap.get(k) +  " -- ID=" +  idVal   + ") The contract cannot have a Status Code set to \"<B>03</B>\" </h5><BR>");
+					out.println("<h5> The contract cannot have a Status Code set to \"<B>03</B>\" </h5><BR>");
 				}
 				if (eMap.get(k) == -15) {
-					out.println("<h5>(Error:" + eMap.get(k) +  " -- ID=" +  idVal   + ") The Effective Date was not entered. </h5><BR>");
+					out.println("<h5> The  Effective Date was not entered. </h5><BR>");
 				}
-				if (eMap.get(k) == -25) {
-					out.println("<h5>(Error:" + eMap.get(k) +  " -- ID=" +  idVal   + ") The Next Aging Date (" + naDate+ ") is less than the Effective Date (" + effDate + "). </h5><BR>");
-				}
-				
-				
 				
 			}
 		}

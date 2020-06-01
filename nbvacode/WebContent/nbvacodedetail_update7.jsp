@@ -7,10 +7,8 @@
 <%@ page import="java.text.*"%>
 <%@ page import="com.olympus.nbva.assets.AssetData"%>
 <%@ page import="com.olympus.nbva.contracts.ContractData"%>
-
 <%@ page import="org.apache.commons.lang3.tuple.*"%>
 <%@ page import="com.olympus.olyutil.*"%>
-<%@ page import="com.olympus.nbva.DateUtil"%>
 <%@ page import="java.lang.reflect.*"%>
 
 <% 
@@ -36,9 +34,7 @@
 	rtnAssetMap = (HashMap<String, String> )session.getAttribute("returnMap");
 	String useCodeData = (String) session.getAttribute("useCodeData");
 	
-	//HashMap<String, CalcTableData> calcTableMap = new HashMap<String, CalcTableData>();
-	//calcTableMap = (HashMap<String, CalcTableData> )session.getAttribute("CalcTableData");
-	//System.out.println("*** Buy - 24plus (5):" +  calcTableMap.get("5").getRoll24plus() + "--");
+	
 	
 	/*
 	Set<String> keys = codeMap.keySet();  //get all keys
@@ -261,7 +257,7 @@ public void  buildCellsContract( JspWriter out, ContractData contract, String fo
 	String excel = null;
 	String rowColor = null;
 	String style = "b3c";
-	//int rVal = DateUtil.compareDates(contract.getNextAgingDate(), contract.getEffectiveDate());
+ 	
 	out.println("<tr>"); 
 	out.println("<th class=\" " + style + "  \" >Contract Number</th>");
 	out.println( "<td class=\"a\">" + contract.getContractID() + "</td></tr>");
@@ -308,11 +304,6 @@ public void  buildCellsContract( JspWriter out, ContractData contract, String fo
 	out.println("<th class=\" " + style + "  \" >Months Remaining</th>");
 	out.println( "<td class=\"a\">" + mthRem  + "</td></tr>");
 	
-	out.println("<tr>");
-	out.println("<th class=\" " + style + "  \" >Aging Months Difference</th>");
-	out.println( "<td class=\"a\">" + contract.getMonthsDiff() + "</td></tr>");
-	
-	
 	//double equipPayment = contract.getEquipPayment();
 	//String equipPayment_df = df.format(equipPayment);
 	String equipPayment_df = Olyutil.decimalfmt(contract.getEquipPayment(), "$###,##0.00");
@@ -347,9 +338,21 @@ public void  buildCellsContract( JspWriter out, ContractData contract, String fo
 	out.println("<tr>");
 	out.println("<th class=\" " + style + "  \" >Purchase Option</th>");
 	out.println( "<td class=\"a\">"  + contract.getPurOption() + "</td></tr>");
-	//System.out.println("*** compareDate returned=" + rVal + "--   (Results: (0-> equalTo) -- (1-> OK) -- (-1 -> Error))");
-
 	
+	
+	/*
+ 
+	out.println("<tr>");
+	out.println("<th class=\" " + style + "  \" >Create DispCode File <br> May take a while to build file.</th>");	
+	out.println( "<td class=\"a\"> ");
+	out.println(" <form name=\"dispForm\"    enctype=\"multipart/form-data\"   method=\"get\" action=" +   formUrlDisp  +  " >    ");
+ 	out.println("<input type=\"submit\" value=\"Create DispCode File\" class=\"btn\" /> ");
+	 
+	out.println("</table>");
+	//out.println("</form> </td></tr></table>");
+	
+	out.println( "  </td></tr>");
+	*/
 	//System.out.println("*** boDate=" + contract.getBuyoutDate() + "--");
 }
 
@@ -734,7 +737,7 @@ out.println("</form> </td></tr></table>");
 
 	}
 	 
-
+	
 
 %>
 

@@ -7,7 +7,6 @@
 <%@ page import="java.text.*"%>
 <%@ page import="com.olympus.nbva.assets.AssetData"%>
 <%@ page import="com.olympus.nbva.contracts.ContractData"%>
-
 <%@ page import="org.apache.commons.lang3.tuple.*"%>
 <%@ page import="com.olympus.olyutil.*"%>
 <%@ page import="com.olympus.nbva.DateUtil"%>
@@ -36,9 +35,7 @@
 	rtnAssetMap = (HashMap<String, String> )session.getAttribute("returnMap");
 	String useCodeData = (String) session.getAttribute("useCodeData");
 	
-	//HashMap<String, CalcTableData> calcTableMap = new HashMap<String, CalcTableData>();
-	//calcTableMap = (HashMap<String, CalcTableData> )session.getAttribute("CalcTableData");
-	//System.out.println("*** Buy - 24plus (5):" +  calcTableMap.get("5").getRoll24plus() + "--");
+	//System.out.println("*** Init" );
 	
 	/*
 	Set<String> keys = codeMap.keySet();  //get all keys
@@ -436,6 +433,7 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 	//String formUrlValue = "/nbvadetail_flex.jsp" ;
 	String formUrlValue = "/nbvadetail_update.jsp" ;
 	int listArrSZ = rtnPair.size();
+	System.out.println("*** SIZE CHECK:" + listArrSZ);
 	if (listArrSZ > 0) {
 		//cells +="  <form name=\"getAsset\" enctype=\"multipart/form-data\" method=\"POST\" action=\"/nbvacode/nbvamod\" > ";
 		cells +="  <form name=\"getAsset\"  method=\"POST\" action=\"/nbvacode/nbvamod\" > ";
@@ -466,7 +464,7 @@ public String  buildCellsAsset( HashMap<String, String> hm, JspWriter out,  List
 				for (int j = 0; j < rtnArrSZ; j++) {
 					AssetData asset = new AssetData();
 					asset = assetList.get(j);
-					//System.out.println("*** AssetReturn: EquipmentType=" + asset.getEquipType() + "--");
+					System.out.println("*** AssetReturn: EquipmentType=" + asset.getEquipType() + "--");
 					//System.out.println("*** AssetReturn: CustomerID=" + asset.getCustomerID() + "--");
 					model = asset.getModel();
 					//System.out.println("*** AssetReturn: Model ->" + model + "--");
@@ -706,7 +704,7 @@ out.println("</form> </td></tr></table>");
 		
 		/**********************************************************************************************************************************************************/
 	/* Display Asset Data  */
-	
+	System.out.println("*** CallbuildCellsAsset" );
 	out.println("<BR>");
 	out.println("<BR><div>Asset Data" );
 	out.println("<table class=\"tablesorter\" border=\"1\"> <thead> <tr>");
@@ -734,7 +732,7 @@ out.println("</form> </td></tr></table>");
 
 	}
 	 
-
+	
 
 %>
 

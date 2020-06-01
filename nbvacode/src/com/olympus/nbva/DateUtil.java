@@ -30,6 +30,7 @@ public class DateUtil {
    }
 	/********************************************************************************************************************************************************/
 	//Default pattern is yyyy-MM-dd
+	// Invoke: 	int mthDiff = DateUtil.calculateMonthsBetweenDates(termDate, effDate, 0);
 	public static int calculateMonthsBetweenDates(String termDate, String effDate, int monthsToAdd) {
 	
 		int months = 0;
@@ -114,7 +115,9 @@ public class DateUtil {
 	
 	/********************************************************************************************************************************************************/
 	// Returns years, months and days
-
+	// int mthDiff = DateUtil.differenceInMonths("2020-04-10", "2020-06-10");
+	
+	
 	public static int differenceInMonths(String effDate, String termDate) {
 		int diff = 0;
 		Period period = Period.between(

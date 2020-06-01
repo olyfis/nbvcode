@@ -7,8 +7,10 @@
 <%@ page import="java.text.*"%>
 <%@ page import="com.olympus.nbva.assets.AssetData"%>
 <%@ page import="com.olympus.nbva.contracts.ContractData"%>
+<%@ page import="com.olympus.nbva.contracts.CalcTableData"%>
 <%@ page import="org.apache.commons.lang3.tuple.*"%>
 <%@ page import="com.olympus.olyutil.*"%>
+<%@ page import="com.olympus.nbva.DateUtil"%>
 <%@ page import="java.lang.reflect.*"%>
 
 <% 
@@ -27,6 +29,8 @@
 	//DecimalFormat df = new DecimalFormat("$###,##0.00");
 	String opt =  (String) session.getAttribute("opt");
 	//System.out.println("*** IN RESULT JSP");
+	HashMap<String, CalcTableData> calcTableMap = new HashMap<String, CalcTableData>();
+	calcTableMap = (HashMap<String, CalcTableData> )session.getAttribute("CalcTableData");
 %>
 
 <!DOCTYPE html>
@@ -277,6 +281,9 @@ public void  buildCellsContract( JspWriter out, ContractData contract, String fo
 	String excel = null;
 	String rowColor = null;
 	String style = "b3c";
+	
+	
+	int rVal = DateUtil.compareDates(contract.getNextAgingDate(), contract.getEffectiveDate());
  	
 	out.println("<tr>"); 
 	out.println("<th class=\" " + style + "  \" >Contract Number</th>");
@@ -323,6 +330,11 @@ public void  buildCellsContract( JspWriter out, ContractData contract, String fo
 	out.println("<tr>");
 	out.println("<th class=\" " + style + "  \" >Months Remaining</th>");
 	out.println( "<td class=\"a\">" + mthRem  + "</td></tr>");
+	
+	
+	out.println("<tr>");
+	out.println("<th class=\" " + style + "  \" >Aging Months Difference</th>");
+	out.println( "<td class=\"a\">" + contract.getMonthsDiff() + "</td></tr>");
 	
 	//double equipPayment = contract.getEquipPayment();
 	//String equipPayment_df = df.format(equipPayment);
@@ -373,6 +385,7 @@ public void  buildCellsContract( JspWriter out, ContractData contract, String fo
 	
 	out.println( "  </td></tr>");
 	//System.out.println("*** boDate=" + contract.getBuyoutDate() + "--");
+	//System.out.println("*** compareDate returned=" + rVal + "--   (Results: (0-> equalTo) -- (1-> OK) -- (-1 -> Error))");
 }
 
 /*************************************************************************************************************************************************************/

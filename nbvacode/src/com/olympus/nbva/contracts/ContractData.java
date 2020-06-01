@@ -14,6 +14,7 @@ package com.olympus.nbva.contracts;
 	private String contractStatus;
 	private String purOption;
 	private int monthsRemain;
+	private int monthsDiff;
 	private String finalInvDueDate;
 	private String effectiveDate;
 	private String termPlusSpan;
@@ -32,6 +33,7 @@ package com.olympus.nbva.contracts;
 	private double buyTotal;
 	private String Invoice;
 	private String nextAgingDate;
+	private String agingDate;
 	/****************************************************************************************************************************************************/
 
 	
@@ -42,6 +44,18 @@ package com.olympus.nbva.contracts;
 	
 	public String getInvoice() {
 		return Invoice;
+	}
+	public int getMonthsDiff() {
+		return monthsDiff;
+	}
+	public void setMonthsDiff(int monthsDiff) {
+		this.monthsDiff = monthsDiff;
+	}
+	public String getAgingDate() {
+		return agingDate;
+	}
+	public void setAgingDate(String agingDate) {
+		this.agingDate = agingDate;
 	}
 	public String getNextAgingDate() {
 		return nextAgingDate;

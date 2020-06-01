@@ -39,7 +39,6 @@ import com.olympus.nbva.assets.AssetData;
 import com.olympus.nbva.contracts.ContractData;
 import com.olympus.nbva.kits.GetKitData;
 import com.olympus.olyutil.Olyutil;
-//import com.olympus.nbva.contracts.CalcTableData;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -339,17 +338,10 @@ public class NbvaCodeDisp extends HttpServlet {
 			int rtnDate = -15;
 			String termDate = rtnPair.get(0).getLeft().getTermDate();
 			String commDate = rtnPair.get(0).getLeft().getCommenceDate();
-			
-			String nextAgingDate = rtnPair.get(0).getLeft().getNextAgingDate();
-			
-			
 			String  termPlusSpan = DateUtil.addMonthsToDate(termDate, mthSpan);
 			//System.out.println("^^^^ termPlusSpan=" + termPlusSpan);
 			//System.out.println("***^^^^^*** mthSpan=" + mthSpan + "-- TermDate=" + termDate + "-- eDate=" + effDate + "-- CommDate=" + commDate + "-- spanDatePlus9=" + termPlusSpan);
 			// Check dates
-			int mthDiff = DateUtil.differenceInMonths(effDate, nextAgingDate);			
-			rtnPair.get(0).getLeft().setMonthsDiff(mthDiff);
-			
 			
 			if (effDate.equals("Click for Calendar") || Olyutil.isNullStr(effDate)   ) {
 				errIDArray.add(rtnDate);
@@ -386,20 +378,6 @@ public class NbvaCodeDisp extends HttpServlet {
 					errIDArray.add(-10);
 					// System.out.println("----- IC error");
 				}
-				// Check Next Aging date
-				int rVal = DateUtil.compareDates(nextAgingDate, effDate);
-				
-					
-				if (rVal == -1) {
-					errIDArray.add(-25);
-				} else if ( rVal == 0) {
-					System.out.println("nextAgingDate and effective date are equal.");
-				} else if ( rVal > 0) {
-					System.out.println("nextAgingDate is greater than effective date. -- MthDiff=" + mthDiff + "--");
-				}
-				
-				
-				
 			} catch (ParseException e) {
 
 				e.printStackTrace();
@@ -424,7 +402,6 @@ public class NbvaCodeDisp extends HttpServlet {
 				Payperiod = 0
 				FV = Residual
 				Type = False
-
 			 */	
 		public static  double getPV(double rate, double term, double numPymts, double residual, boolean type) {
 			Double dRtn = 0.0;
@@ -749,53 +726,23 @@ public class NbvaCodeDisp extends HttpServlet {
 	    
 			return(rMap);
 		}
-
-	/****************************************************************************************************************************************************************/
-
-	/****************************************************************************************************************************************************************/
- 	public static boolean displayHashMap(HashMap<String, String> hashMap) {
-		boolean status = false;
-
-		Set<String> keys = hashMap.keySet(); // get all keys
-		if (keys.size() > 0) {
-			status = true;
-			for (String key : keys) {
-				System.out.println("**----** Key=" + key + "-- Value=" + hashMap.get(key) + "--");
+		/****************************************************************************************************************************************************/
+		/****************************************************************************************************************************************************/
+		public static boolean displayHashMap(HashMap<String, String> hashMap) {
+			boolean status = true;
+			
+			Set<String> keys = hashMap.keySet();  //get all keys
+			for(String key: keys) {
+	
+			  System.out.println("**----** Key=" + key + "-- Value=" + hashMap.get(key) + "--");
 			}
+			return(status);
+			
 		}
-		return (status);
-	}
-
-	/****************************************************************************************************************************************************************/
- /*	
- 	public static HashMap<String, CalcTableData> getCalcTableMap(ArrayList<String> sArr, HashMap<String, CalcTableData> hMap) {
- 		String mth = "";
- 		
- 		
- 		for (String str : sArr) { // iterating ArrayList
- 			CalcTableData calcTab = new CalcTableData();
-			//System.out.println("**** Str=" + str);
-			String[] items = str.split(",");
-			if (items[0].equals("Months")) {
-				continue;
-			}
-			mth = items[0];
-			calcTab.setMonth(mth);
-			calcTab.setBuy24plus(Olyutil.strToDouble(items[1]));
-			calcTab.setRoll24plus(Olyutil.strToDouble(items[2]));
-			calcTab.setBuy24(Olyutil.strToDouble(items[3]));
-			calcTab.setRoll24(Olyutil.strToDouble(items[4]));
-			hMap.put(mth, calcTab);
- 		}	
- 		return(hMap);
- 	}
-*/
-	/****************************************************************************************************************************************************************/
-
+		/****************************************************************************************************************************************************/
 
 		@Override
 		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	//HashMap<String, CalcTableData> calcTableMap = new HashMap<String, CalcTableData>();
 			HashMap<String, String> returnMap = new HashMap<String, String>();
 			HashMap<String, String> paramMap = new HashMap<String, String>();
 			HashMap<String, String> codeMapRtn = new HashMap<String, String>();
@@ -803,7 +750,6 @@ public class NbvaCodeDisp extends HttpServlet {
 			HashMap<String, ArrayList<Integer>> sqlErrMap = new HashMap<String, ArrayList<Integer>>();
 			ArrayList<Integer> errIDArrayRtn = new ArrayList<>();
 			ArrayList<String> ageArr = new ArrayList<String>();
-			ArrayList<String> calcArr = new ArrayList<String>();
 			ArrayList<String> codeArrRtn = new ArrayList<String>();
 			double sumTotal = 0.0;
 			String effDate = "";
@@ -821,7 +767,7 @@ public class NbvaCodeDisp extends HttpServlet {
 			//String ageFile = "Y:\\GROUPS\\Global\\BI Reporting\\Finance\\FIS_Bobj\\unappsuspense\\dailyAge.csv";
 			String ageFile = "C:\\Java_Dev\\props\\nbvaupdate\\dailyAge.csv";
 			String rtnFile = "C:\\Java_Dev\\props\\nbvaupdate\\returnStat.csv";
-			String calcFile = "C:\\Java_Dev\\props\\nbvaupdate\\calcTable.csv";
+			
 			String tag = "csvData: ";
 			DecimalFormat format = new DecimalFormat("0.00");
 			Date bd = Olyutil.getCurrentDate();
@@ -883,14 +829,11 @@ public class NbvaCodeDisp extends HttpServlet {
 				//int mthRem = 0;
 				
 				ageArr = Olyutil.readInputFile(ageFile);
-				//calcArr = Olyutil.readInputFile(calcFile);
 				returnMap = getReturnStat(rtnFile);
 				//displayHashMap(returnMap);
-		//calcTableMap = getCalcTableMap(calcArr, calcTableMap);
-		//System.out.println("*** Roll - 24plus:" +  calcTableMap.get("15").getRoll24plus() + "--");
+			 
 				
 				// Olyutil.printStrArray(ageArr);
-				// Olyutil.printStrArray(calcArr);
 				// get data from DB
 				strArr = getDbData(idVal, sqlFile, "", "Asset");
 				
@@ -923,7 +866,6 @@ public class NbvaCodeDisp extends HttpServlet {
 					String commDate = rtnPair.get(0).getLeft().getCommenceDate();
 					//System.out.println("*** SumTotal=" + sumTotal );
 					String termPlusSpan = DateUtil.addMonthsToDate(termDate, mthSpan);	
-					String naDate = rtnPair.get(0).getLeft().getNextAgingDate();
 					rtnPair.get(0).getLeft().setTermPlusSpan(termPlusSpan);
 					request.getSession().setAttribute("commDate", commDate);
 					request.getSession().setAttribute("termDate", termDate);
@@ -936,9 +878,9 @@ public class NbvaCodeDisp extends HttpServlet {
 					request.getSession().setAttribute("termPlusSpan", termPlusSpan);
 					request.getSession().setAttribute("codeMapRtn", codeMapRtn);
 					request.getSession().setAttribute("useCodeData", useCodeData);
-					request.getSession().setAttribute("returnMap", returnMap);
-					request.getSession().setAttribute("naDate", naDate);
-					//request.getSession().setAttribute("calcTableMap", calcTableMap);
+					
+					
+					 request.getSession().setAttribute("returnMap", returnMap);
 					
 					String opt = "";
 					if (errIDArrayRtn.size() > 0) {
@@ -949,8 +891,7 @@ public class NbvaCodeDisp extends HttpServlet {
 					}	
 					request.getSession().setAttribute("opt", opt);
 					//System.out.println("*** Dispatch to:" + dispatchJSP);
-					//System.out.println("*** Buy - 24plus (3):" +  calcTableMap.get("3").getBuy24plus() + "--");
-					//dispatchJSP = "/test.jsp";	
+					
 					request.getRequestDispatcher(dispatchJSP).forward(request, response);	
 				} else {
 					request.getRequestDispatcher(dispatchJSP_Error).forward(request, response);
@@ -974,15 +915,11 @@ public class NbvaCodeDisp extends HttpServlet {
 		}
 		
 		/****************************************************************************************************************************************************/
-		
-		/*
-		 * 
-		 * 
-		 * @Override
+		@Override
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			HashMap<String, ArrayList<Integer>> sqlErrMap = new HashMap<String, ArrayList<Integer>>();
 			
-		
+			
 			
 			ArrayList<Integer> errIDArrayRtn = new ArrayList<>();
 			ArrayList<String> ageArr = new ArrayList<String>();
@@ -1012,7 +949,7 @@ public class NbvaCodeDisp extends HttpServlet {
 			Date bd = Olyutil.getCurrentDate();
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); 
 			String boDate = formatter.format(bd);
-		 
+			/*
 			System.out.println("Date=" + boDate + "-");  
 			System.out.println("*** Edate=" + effDate + "--");
 			
@@ -1023,7 +960,7 @@ public class NbvaCodeDisp extends HttpServlet {
 			String invoiceParamName = "invoice";
 			String invoiceParamValue = request.getParameter(invoiceParamName);
 			String invoice = invoiceParamValue;
- 
+	*/
 			// System.out.println("*** eDate=" + eDateParamValue + "-- RO=" + roParamValue +
 			// "--");
 			String formUrl = "formUrl";
@@ -1067,8 +1004,6 @@ public class NbvaCodeDisp extends HttpServlet {
 				//System.out.println("----- dateErrors=" + errIDArrayRtn.size());
 				String termDate = rtnPair.get(0).getLeft().getTermDate();
 				String commDate = rtnPair.get(0).getLeft().getCommenceDate();
-				
-				
 				//System.out.println("*** SumTotal=" + sumTotal );
 				String termPlusSpan = DateUtil.addMonthsToDate(termDate, mthSpan);	
 				rtnPair.get(0).getLeft().setTermPlusSpan(termPlusSpan);
@@ -1095,8 +1030,6 @@ public class NbvaCodeDisp extends HttpServlet {
 				request.getRequestDispatcher(dispatchJSP_Error).forward(request, response);
 			}
 		} // End doGet()
-
-*/
 	} // End Class
 
  
